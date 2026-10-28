@@ -1,0 +1,2017 @@
+একদম ঠিক ধরেছেন! স্কিনকেয়ার বা পারফিউমের মতো ফ্যাশন আইটেমগুলোতে (যেমন: ড্রেস, থ্রি-পিস, শাড়ি বা ব্যাগ) কালার, সাইজ কিংবা মেটেরিয়ালের মতো ভ্যারিয়েন্ট (Variants) থাকে। তাই প্রোডাক্ট ডিটেইলস পেইজটি (Product Details Page) একটু আলাদা এবং অ্যাডভান্সড হতে হবে।
+ফ্যাশন প্রোডাক্টের জন্য প্রোডাক্ট ডিটেইলস পেইজে কী কী থাকতে হবে এবং এটি কীভাবে কাজ করবে, তার একটি দারুণ আইডিয়া নিচে দেওয়া হলো:
+👗 ফ্যাশন প্রোডাক্ট ডিটেইলস পেইজের মূল ফিচারসমূহ:
+ * Color Swatches (কালার অপশন বা সচেস):
+   * কাস্টমার পেইজে ঢুকেই দেখতে পারবে এই ড্রেসটি কী কী রঙে পাওয়া যাচ্ছে (যেমন: Dark Navy Blue, Champagne Gold, Maroon ইত্যাদি)।
+   * কাস্টমার যেকোনো কালার গোল গোল বক্সে বা সচেসে ক্লিক করলে প্রোডাক্টের ছবিও সাথে সাথে সেই কালারে চেঞ্জ হয়ে যাবে।
+ * Size Selector (সাইজ গাইড):
+   * ফ্যাশনের জন্য সাইজ খুব জরুরি (যেমন: M, L, XL, XXL)।
+   * সাথে একটি ছোট "Size Guide" বাচার চার্ট থাকতে পারে, যেন কাস্টমার বুঝতে পারে কোন সাইজটি তার জন্য পারফেক্ট হবে।
+ * Stock Status per Variant:
+   * ধরুন, আপনার কাছে Dark Navy Blue কালারের L সাইজটি স্টকে আছে, কিন্তু XL সাইজটি স্টক আউট। কাস্টমার যখনই সাইজ সিলেক্ট করবে, চট করে নিচে দেখাবে "Stock Out" বা "In Stock", যা কাস্টমারকে সঠিক সিদ্ধান্ত নিতে সাহায্য করবে।
+ * Dynamic Price (যদি কালারভেদে দাম আলাদা হয়):
+   * অনেক সময় নির্দিষ্ট কোনো প্রিমিয়াম কালার বা ডিজাইনের দাম একটু বেশি বা কম হতে পারে। কালার সিলেক্ট করলেই প্রাইস অটোমেটিক আপডেট হয়ে যাবে।
+💻 MongoDB-তে ফ্যাশন প্রোডাক্টের স্কিমা (Schema) কেমন হবে?
+আপনার ডাটাবেসে ফ্যাশন আইটেমগুলো সেভ করার জন্য এভাবে variants অ্যারে (Array) রাখতে পারেন:
+{
+  "name": "Anusmita Premium Party Gown",
+  "category": "Fashion",
+  "basePrice": 2500,
+  "description": "উচ্চমানের চাইনিজ ফ্যাব্রিকের প্রিমিয়াম পার্টি গাউন।",
+  "variants": [
+    {
+      "color": "Dark Navy Blue",
+      "colorCode": "#1E2533",
+      "sizes": [
+        { "size": "M", "stock": 5 },
+        { "size": "L", "stock": 2 },
+        { "size": "XL", "stock": 0 }
+      ],
+      "image": "/images/navy-gown.jpg"
+    },
+    {
+      "color": "Champagne Gold",
+      "colorCode": "#C0A06B",
+      "sizes": [
+        { "size": "M", "stock": 4 },
+        { "size": "L", "stock": 3 }
+      ],
+      "image": "/images/gold-gown.jpg"
+    }
+  ]
+}
+
+🤖 চ্যাটবটেও এটি যেভাবে কাজ করবে:
+কাস্টমার যদি আপনার Contact Page-এর এআই চ্যাটবটে এসে লেখে— "এই গাউনটি কি মেরুন কালারে বা L সাইজে হবে?"
+তখন ব্যাকএন্ড কোড সরাসরি MongoDB-র এই variants চেক করে বলে দেবে:
+> "আমাদের কাছে এই গাউনটি মেরুন কালারে নেই, তবে Dark Navy Blue এবং Champagne Gold কালারে M এবং L সাইজ স্টকে আছে!"
+> 
+ফ্যাশনের এই কালার ও সাইজ ভ্যারিয়েন্টের পার্টটি কি আপনার Next.js ফ্রন্টএন্ডে ডিজাইনের ক্ষেত্রে ডাইনামিকভাবে কোড করতে চান?
+
+
+ফ্যাশন, ব্যাগ, বা বেডশিটের মতো প্রোডাক্টগুলোর জন্য একদম আলাদা নতুন কোনো পেইজ তৈরি করার কোনো প্রয়োজন নেই!
+বরং আপনার বিদ্যমান প্রোডাক্ট ডিটেইলস পেইজটিকেই ডাইনামিক (Dynamic Variant Component) হিসেবে কোড করে নেওয়াটাই সবথেকে প্রফেশনাল মেথড। এতে আপনার কোড রি-ইউজেবল থাকবে এবং মেইনটেইন করা অনেক সহজ হবে।
+💡 এটি কীভাবে কাজ করবে? (Dynamic Product Details Page)
+একটি ডায়নামিক পেইজেই আপনার সব ধরনের প্রোডাক্ট (স্কিনকেয়ার, ফ্যাশন, ব্যাগ, কিংবা বেডশিট) রেন্ডার হবে। ক্যাটাগরি অনুযায়ী অপশনগুলো অটোমেটিক চেঞ্জ হবে:
+| প্রোডাক্ট ক্যাটাগরি | পেইজে কী কী অপশন শো করবে? |
+|---|---|
+| Skincare & Perfume | শুধু ছবি, দাম, বিবরণ, সুফল/ব্যবহারের নিয়ম (Color/Size অপশন লুকানো থাকবে)। |
+| Fashion Products (ড্রেস) | কালার সচেস (Color Swatches) + সাইজ সিলেক্টর (M, L, XL) + সাইজ চার্ট। |
+| Bedsheets (বেডশিট) | কালার/প্রিন্ট সিলেক্টর + সাইজ অপশন (Single, Double, King Size) + মেটেরিয়াল ইনফো। |
+| Bags & Accessories | কালার ভ্যারিয়েন্ট (Black, Gold, Navy) + ডায়মেনশন/সাইজ (Length x Height)। |
+🛠️ Next.js & Tailwind CSS ডাইনামিক কম্পোনেন্ট স্ট্রাকচার
+আপনার প্রোডাক্ট ডিটেইলস পেইজে (app/product/[id]/page.js) কোডটি এমনভাবে সাজাতে হবে যেন ডাটাবেসে variants থাকলে অটোমেটিক কালার ও সাইজ অপশনগুলো ভেসে ওঠে, না থাকলে হাইড হয়ে যায়:
+'use client';
+import { useState } from 'react';
+
+export default function ProductDetailsPage({ product }) {
+  // বাই-ডিফল্ট প্রথম ভ্যারিয়েন্ট সিলেক্ট থাকবে
+  const [selectedColor, setSelectedColor] = useState(product?.variants?.[0]?.color || null);
+  const [selectedSize, setSelectedSize] = useState(null);
+
+  return (
+    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-white">
+      {/* ১. প্রোডাক্ট ইমেজ (কালার সিলেক্ট করলে ছবি চেঞ্জ হবে) */}
+      <div className="bg-[#1E2533] p-4 rounded-2xl border border-[#C0A06B]/20">
+        <img 
+          src={product.variants?.find(v => v.color === selectedColor)?.image || product.mainImage} 
+          alt={product.name}
+          className="w-full h-auto rounded-xl object-cover"
+        />
+      </div>
+
+      {/* ২. প্রোডাক্ট ডিটেইলস ও ভ্যারিয়েন্ট অপশন */}
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold text-[#C0A06B]">{product.name}</h1>
+        <p className="text-2xl font-semibold text-white">৳ {product.price}</p>
+        <p className="text-gray-300 text-sm">{product.description}</p>
+
+        {/* 🎨 কালার ভ্যারিয়েন্ট (যদি ফ্যাশন, ব্যাগ বা বেডশিটে কালার থাকে) */}
+        {product.variants && product.variants.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-[#C0A06B] mb-2">Color Variant:</h3>
+            <div className="flex gap-3">
+              {product.variants.map((v) => (
+                <button
+                  key={v.color}
+                  onClick={() => setSelectedColor(v.color)}
+                  className={`px-4 py-2 rounded-xl border text-sm transition ${
+                    selectedColor === v.color 
+                      ? 'border-[#C0A06B] bg-[#C0A06B] text-black font-bold' 
+                      : 'border-white/20 bg-white/5 text-white hover:border-[#C0A06B]'
+                  }`}
+                >
+                  {v.color}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 📐 সাইজ ভ্যারিয়েন্ট (ড্রেস বা বেডশিটের জন্য Dynamic Size) */}
+        {product.sizes && product.sizes.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-[#C0A06B] mb-2">Select Size / Dimension:</h3>
+            <div className="flex gap-3">
+              {product.sizes.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setSelectedSize(s)}
+                  className={`px-3 py-1.5 rounded-lg border text-sm ${
+                    selectedSize === s 
+                      ? 'border-[#C0A06B] bg-[#C0A06B] text-black font-bold' 
+                      : 'border-white/20 bg-white/5 text-white'
+                  }`}
+                >
+                  {s} {/* ড্রেসের জন্য M, L | বেডশিটের জন্য King, Queen */}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 🛒 কার্ট ও বাই বাটন */}
+        <div className="flex gap-4 pt-4">
+          <button className="flex-1 bg-[#C0A06B] text-black font-bold py-3 rounded-xl hover:opacity-90 transition">
+            Add to Cart
+          </button>
+          <button className="flex-1 bg-white/10 text-white border border-[#C0A06B]/40 font-bold py-3 rounded-xl hover:bg-white/20 transition">
+            Buy Now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+🗄️ MongoDB-তে ডাটা স্ট্রাকচার উদাহরণ
+ডাটাবেসে ভিন্ন ক্যাটাগরির প্রোডাক্টগুলো যেভাবে রাখবেন:
+👜 ব্যাগের উদাহরণ (Bag Variant):
+{
+  "name": "Chinese Luxury Women Side Bag",
+  "category": "Bags",
+  "price": 1850,
+  "variants": [
+    { "color": "Champagne Gold", "image": "/images/bag-gold.jpg" },
+    { "color": "Dark Slate Navy", "image": "/images/bag-navy.jpg" }
+  ]
+}
+
+🛏️ বেডশিটের উদাহরণ (Bedsheet Variant):
+{
+  "name": "Japanese Cotton Floral Bedsheet",
+  "category": "Home Decor",
+  "price": 2200,
+  "sizes": ["Single", "Double", "King Size"],
+  "variants": [
+    { "color": "Blue Floral", "image": "/images/bed-blue.jpg" },
+    { "color": "Pink Floral", "image": "/images/bed-pink.jpg" }
+  ]
+}
+
+✨ সুবিধা:
+১. একটাই ডাইনামিক পেইজ দিয়ে আপনার শপের স্কিনকেয়ার, ফ্যাশন, ব্যাগ, বেডশিট ও পারফিউম সব হ্যান্ডেল করা সম্ভব।
+২. কোড বারবার লিখতে হবে না, যা সাইটের লোডিং স্পিড ফাস্ট রাখবে।
+পেইজের এই ডাইনামিক ভ্যারিয়েন্ট লজিকটি কি একদম পরিষ্কার বুঝতে পেরেছেন?
+
+একদম ঠিক বুঝেছেন! আপনার ই-কমার্সে যেহেতু Skincare, Perfume, Shoes, Clothes, Bags, Bedsheets, Home Decor থেকে শুরু করে Mobile Accessories এবং Watch—এত রকমের ভিন্ন ক্যাটাগরির প্রোডাক্ট থাকবে, তাই প্রতিটি ক্যাটাগরির UI (User Interface) এবং ফিল্ডগুলো একই পেইজে হুবহু এক রকম দেখালে ভালো লাগবে না।
+যেমন—স্কিনকেয়ারে দরকার হয় "How to Use" বা "Benefits", কাপড়ে দরকার হয় "Size Chart", জুতোয় দরকার হয় "EU Shoe Size", আর মোবাইল এক্সেসরিজে দরকার হতে পারে "Compatibility" বা "Warranty"।
+Next.js এবং Tailwind CSS-এ একটিমাত্র ডাইনামিক প্রোডাক্ট ডিটেইলস পেইজ (app/product/[id]/page.js) রেখে, Conditional Rendering (কন্ডিশনাল রেন্ডারিং) বা Category-based Dynamic Layout ব্যবহার করে খুব সহজেই এটি করা সম্ভব!
+🛠️ এটি কীভাবে কাজ করবে? (Category-Based Dynamic Layout)
+কোডটি প্রথমে চেক করবে প্রোডাক্টটির category বা type কী। এরপর সেই ক্যাটাগরি অনুযায়ী পেইজের লেআউট বা সেকশনগুলো পরিবর্তন করে ফেলবে।
+ক্যাটাগরিভিত্তিক UI চার্ট:
+ * Skincare / Perfume: ছবি + দাম + বর্ণনা + Skin Type + Benefits + How to Use (কোনো সাইজ বা কালার বক্স দেখাবে না)।
+ * Clothes / Fashion: ছবি + দাম + বর্ণনা + Color Swatches (কালার অপশন) + Size Selector (S, M, L, XL) + Size Guide Link।
+ * Shoes: ছবি + দাম + বর্ণনা + Color Variant + Shoe Size Selector (EU 36-43)।
+ * Mobile Accessories: ছবি + দাম + বর্ণনা + Model Compatibility (যেমন: iPhone 15, Vivo Y31d ইত্যাদি)।
+ * Bedsheets / Home Decor: ছবি + দাম + বর্ণনা + Dimensions / Size (King, Queen) + Material Type।
+💻 Next.js ডাইনামিক কম্পোনেন্ট কোড স্ট্রাকচার
+নিচে একটিমাত্র ফাইলে ক্যাটাগরি অনুযায়ী ডাইনামিক সেকশন রেন্ডার করার প্রফেশনাল কোড স্যাম্পল দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function DynamicProductDetails({ product }) {
+  // স্টেট ম্যানেজমেন্ট
+  const [selectedColor, setSelectedColor] = useState(product?.variants?.[0]?.color || null);
+  const [selectedSize, setSelectedSize] = useState(null);
+
+  return (
+    <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 text-white">
+      
+      {/* 🖼️ বাম পাশ: প্রোডাক্ট ইমেজ (কালার বদলালে ছবিও ডাইনামিক্যালি বদলাবে) */}
+      <div className="bg-[#1E2533] p-6 rounded-3xl border border-[#C0A06B]/20 flex items-center justify-center">
+        <img 
+          src={product.variants?.find(v => v.color === selectedColor)?.image || product.mainImage} 
+          alt={product.name}
+          className="max-h-[450px] object-contain rounded-2xl"
+        />
+      </div>
+
+      {/* 📄 ডান পাশ: ক্যাটাগরি অনুযায়ী পরিবর্তনশীল ইনফো (Dynamic Info Section) */}
+      <div className="space-y-6">
+        <span className="px-3 py-1 bg-[#C0A06B]/20 text-[#C0A06B] rounded-full text-xs font-semibold uppercase tracking-wider">
+          {product.category}
+        </span>
+        
+        <h1 className="text-3xl font-bold text-white">{product.name}</h1>
+        <p className="text-2xl font-bold text-[#C0A06B]">৳ {product.price}</p>
+        <p className="text-gray-300 text-sm leading-relaxed">{product.description}</p>
+
+        {/* 🎨 ১. কালার ভ্যারিয়েন্ট (যেকোনো ফ্যাশন, শু, বা ব্যাগের জন্য প্রযোজ্য) */}
+        {product.variants && product.variants.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-[#C0A06B] mb-2">Available Colors:</h3>
+            <div className="flex gap-3">
+              {product.variants.map((v) => (
+                <button
+                  key={v.color}
+                  onClick={() => setSelectedColor(v.color)}
+                  className={`px-4 py-2 rounded-xl border text-sm transition ${
+                    selectedColor === v.color 
+                      ? 'border-[#C0A06B] bg-[#C0A06B] text-black font-bold' 
+                      : 'border-white/20 bg-white/5 text-white hover:border-[#C0A06B]'
+                  }`}
+                >
+                  {v.color}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 📐 ২. সাইজ বা ডাইমেনশন অপশন (Clothes, Shoes, Bedsheets-এর জন্য আলাদা আলাদা সাইজ) */}
+        {product.sizes && product.sizes.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-[#C0A06B] mb-2">
+              {product.category === 'Shoes' ? 'Select Shoe Size (EU):' : 
+               product.category === 'Home Decor' ? 'Select Bed Size:' : 'Select Size:'}
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {product.sizes.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setSelectedSize(s)}
+                  className={`px-4 py-2 rounded-xl border text-sm ${
+                    selectedSize === s 
+                      ? 'border-[#C0A06B] bg-[#C0A06B] text-black font-bold' 
+                      : 'border-white/20 bg-white/5 text-white'
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 📱 ৩. মোবাইল এক্সেসরিজের জন্য কম্প্যাটিবিলিটি (Model Compatibility) */}
+        {product.compatibility && (
+          <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+            <h3 className="text-xs font-semibold text-[#C0A06B] uppercase mb-1">Device Compatibility:</h3>
+            <p className="text-sm text-gray-200">{product.compatibility}</p>
+          </div>
+        )}
+
+        {/* 🌿 ৪. স্কিনকেয়ার বা পারফিউমের জন্য সুফল ও ব্যবহারের নিয়ম (Skincare Exclusive Details) */}
+        {product.category === 'Skincare' && (
+          <div className="space-y-3 bg-white/5 p-4 rounded-xl border border-white/10 text-sm">
+            <div>
+              <span className="font-semibold text-[#C0A06B]">✨ Key Benefits: </span>
+              <span className="text-gray-300">{product.benefits}</span>
+            </div>
+            <div>
+              <span className="font-semibold text-[#C0A06B]">📌 How to Use: </span>
+              <span className="text-gray-300">{product.howToUse}</span>
+            </div>
+          </div>
+        )}
+
+        {/* 🛒 ৫. কার্ট ও বাই বাটন */}
+        <div className="flex gap-4 pt-4">
+          <button className="flex-1 bg-[#C0A06B] text-black font-bold py-3.5 rounded-xl hover:opacity-90 transition shadow-lg">
+            Add to Cart
+          </button>
+          <button className="flex-1 bg-white/10 text-white border border-[#C0A06B]/40 font-bold py-3.5 rounded-xl hover:bg-white/20 transition">
+            Buy Now
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+🌟 এই সিস্টেমের সুবিধা:
+ * মাল্টি-ক্যাটারী হ্যান্ডলিং: একটিমাত্র পেজ কোড দিয়েই আপনি জুতো, কাপড়, স্কিনকেয়ার, মোবাইল এক্সেসরিজ বা বেডশিট—সবকিছুর ডেটা অনুযায়ী ডিটেইলস পেজের লেআউট বদলে ফেলতে পারবেন।
+ * ক্লিন কোড বেস: আলাদা আলাদা প্রোডাক্টের জন্য ডজন ডজন পেজ বানাতে হবে না। MongoDB থেকে ডাটা ফেচ হয়ে আসার সাথে সাথে পেজটি নিজে থেকেই ক্যাটাগরি চিনে প্রয়োজনীয় সেকশনগুলো ওপেন করে দেবে।
+আপনার এই বিশাল ই-কমার্স কালেকশনের জন্য এই ডাইনামিক আর্কিটেকচারটি একদম পারফেক্ট কাজ করবে! এই লেআউট বা কোড নিয়ে আরও কোনো কাস্টমাইজেশন চাচ্ছেন কি?
+
+আপনার Anusmita ই-কমার্স সাইটের Product Details Page (/product/[id])-কে একদম বিশ্বমানের ই-কমার্স সাইটগুলোর (যেমন: Sephora, Asian Beauty Hubs বা Zara) মতো ফিউচার-প্রুফ ও হাই-কনভার্টিং করার জন্য নিচে আরও কিছু সুপার অ্যাডভান্সড ও ইউনিক ফিচার তুলে ধরা হলো:
+🚀 Product Details Page-এর জন্য ১২টি সুপার অ্যাডভান্সড ফিচার
+১. Dynamic Variant Switching & Live Image Sync (ডাইনামিক ভ্যারিয়েন্ট ছবি সিঙ্ক)
+ * লজিক: কাস্টমার যখন ড্রেসের কালার (Dark Slate Navy বা Champagne Gold) কিংবা শু/লিপস্টিকের শেড চেঞ্জ করবে, তখন মেইন প্রোডাক্ট গ্যালারির ছবিগুলো কোনো পেজ রিলোড ছাড়াই সাথে সাথে ওই কালারের ছবিগুলোতে সুইচ করবে।
+২. Category-Aware Dynamic Specs Engine (ক্যাটাগরিভিত্তিক নির্দিষ্ট ইনফো ট্যাবস)
+ * লজিক: একটাই পেজ কম্পোনেন্ট থাকবে, কিন্তু প্রোডাক্ট ক্যাটাগরি অনুযায়ী ট্যাবের ইনফরমেশন ও লেআউট অটো চেঞ্জ হবে:
+   * Skincare/Perfume: Key Ingredients, Benefits, Side-Effects/Precautions, Usage Sequence (Day/Night routine)।
+   * Fashion/Shoes: Fabric/Material details, Size Guide Modal, Washing Instructions, EU/US Shoe conversion table।
+   * Bedsheets/Decor: Fabric Thread Count (TC), Dimensions (Length x Width), Pillowcase bundle count।
+   * Jewelry/Watches: Plating (Gold/Silver), Water resistance, Strap Material।
+   * Mobile Accessories: Model compatibility (Vivo, iPhone, Samsung list), Material durability।
+৩. Smart Stock Urgency & Stock Threshold Badges (স্টক ও স্কেয়ারসিটি অ্যালার্ট)
+ * লজিক:
+   * যদি স্টক ৩টির কম থাকে: ⚠️ "Only 2 items left in stock - Order soon!" (লাল বা গোল্ডেন বাজি)।
+   * স্টক ০ থাকলে: অটোমেটিক "Pre-Order Now" বাটনে কনভার্ট হয়ে যাবে এবং পাশে শিপমেন্ট আসার তারিখ দেখাবে ("Importing from Korea/China - Ships in 7 days")।
+৪. Interactive Size & Fit Recommendation Calculator (সাইজ ও ফিট ক্যালকুলেটর)
+ * লজিক: ড্রেস বা চায়নিজ শুয়ের জন্য কাস্টমার নিজের হাইট/ওয়েট বা পায়ের সাইজ (যেমন: 24 cm) দিলে সিস্টেম সাথে সাথে পারফেক্ট EU সাইজ বা ড্রেস সাইজ (M/L/XL) হাইলাইট করে দেখাবে।
+৫. Dynamic Price & Discount Calculator (ভ্যারিয়েন্ট অনুযায়ী লাইভ প্রাইস)
+ * লজিক: কালার বা সাইজ (যেমন: King Size vs Single Bedsheet) সিলেক্ট করার সাথে সাথে প্রাইস ডায়নামিক্যালি যোগ-বিয়োগ হবে এবং সাথে সাথেই কাস্টমার কত টাকা সেভ করছে (Save ৳২০০) তা লাইভ কাউন্ট হবে।
+৬. Frequently Bought Together (স্মার্ট কম্বো বা বান্ডেল ক্রস-সেল)
+ * লজিক: প্রোডাক্টের নিচে অটোমেটিক ২-৩টি মানানসই আইটেম সাজেস্ট করবে:
+   * সানস্কিন দেখলে ──► সাথে Centella Ampoule + Cleanser (এক ক্লিকে "Add Full Routine Bundle to Cart" বাটন)।
+   * গাউন দেখলে ──► সাথে Matching Side Bag + Earrings।
+৭. Interactive Customer Reviews with Photo Gallery & Skin-Type Filters (স্মার্ট রিভিউ উইজেট)
+ * লজিক: কাস্টমার রিভিউ ফিল্টার করতে পারবে:
+   * "Filter by Skin Type: Oily / Dry / Acne"
+   * "Filter by Verified Buyers with Photos"
+৮. Dynamic Delivery & Cash-on-Delivery (COD) Checker (লোকেশন ও চার্জ ডিটেক্টর)
+ * লজিক: কাস্টমার পেজেই তার জেলা (যেমন: Dhaka বা Chittagong) সিলেক্ট করলে নিচে অটোমেটিক দেখাবে:
+   * 🚚 "Delivery Charge: ৳80 (Dhaka) | Estimated Delivery: 2-3 Days"
+   * 💵 "Cash on Delivery Available"
+৯. Sticky Bottom "Quick Buy / Add to Cart" Bar on Mobile (মোবাইল স্টিকি বাই বার)
+ * লজিক: মোবাইলে স্ক্রোল করে নিচে নেমে গেলেও স্ক্রিনের একদম নিচে স্টিকি বার হিসেবে প্রোডাক্টের নাম, প্রাইস এবং "Buy Now" বাটনটি ভেসে থাকবে, যেন ইউজার যেকোনো সময় অর্ডারে ক্লিক করতে পারে।
+১০. Direct "Ask AI about this Product" Contact Chat Button (চ্যাটবট রিডাইরেক্ট)
+ * লজিক: প্রতিটি প্রোডাক্ট ডিটেইলসে একটি বাটন থাকবে: "💬 Have questions? Ask Anusmita AI"। ক্লিক করলে সরাসরি কন্টাক্ট পেজের চ্যাটবটে নিয়ে যাবে এবং ওই প্রোডাক্টের নাম নিজে থেকেই চ্যাটবক্সে ফিল হয়ে যাবে!
+💻 Next.js অ্যাডভান্সড কম্পোনেন্ট কোড স্ট্রাকচার (app/product/[id]/page.js)
+নিচে সম্পূর্ণ ডায়নামিক ও ক্যাটাগরি-অ্যাওয়্যার প্রফেশনাল প্রোডাক্ট ডিটেইলস পেজের কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+
+export default function AdvancedProductDetails({ product }) {
+  const [selectedColor, setSelectedColor] = useState(product?.variants?.[0]?.color || null);
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
+  const [activeTab, setActiveTab] = useState('details');
+
+  // ডাইনামিক কারেন্ট ইমেজ সিলেক্টর
+  const currentVariant = product?.variants?.find(v => v.color === selectedColor);
+  const currentImage = currentVariant?.image || product?.mainImage || '/placeholder.jpg';
+
+  // স্টক হিসাব
+  const currentStock = currentVariant?.stock ?? product?.stockQuantity ?? 0;
+
+  return (
+    <div className="max-w-7xl mx-auto p-4 md:p-8 text-[#1E2533] space-y-12">
+      
+      {/* -------------------------------------------------------------
+          ১. মেইন গ্রিড: প্রোডাক্ট গ্যালারি + ডায়নামিক ভ্যারিয়েন্ট প্যানেল
+      ------------------------------------------------------------- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        
+        {/* প্রোডাক্ট ইমেজ ভিউয়ার */}
+        <div className="space-y-4">
+          <div className="bg-[#1E2533]/5 p-6 rounded-3xl border border-[#C0A06B]/30 flex items-center justify-center relative overflow-hidden group">
+            <img 
+              src={currentImage} 
+              alt={product.name}
+              className="max-h-[480px] w-auto object-contain rounded-2xl transition duration-500 group-hover:scale-105"
+            />
+            {product.discountPercent > 0 && (
+              <span className="absolute top-4 left-4 bg-[#C0A06B] text-black font-bold px-3 py-1 rounded-full text-xs shadow-md">
+                -{product.discountPercent}% OFF
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* ডায়নামিক ইনফো ও অ্যাকশন সেকশন */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 bg-[#1E2533] text-[#C0A06B] rounded-full text-xs font-semibold tracking-wide uppercase">
+              {product.category}
+            </span>
+            <span className="text-xs text-gray-500">SKU: {product.sku || 'ANUS-001'}</span>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-extrabold text-[#1E2533]">{product.name}</h1>
+
+          {/* দাম ও স্টক অ্যালার্ট */}
+          <div className="flex items-center gap-4">
+            <span className="text-3xl font-bold text-[#C0A06B]">৳ {product.price}</span>
+            {product.oldPrice && (
+              <span className="text-lg text-gray-400 line-through">৳ {product.oldPrice}</span>
+            )}
+            
+            {/* স্টক অ্যালার্ট ব্যাজ */}
+            {currentStock > 0 && currentStock <= 3 ? (
+              <span className="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-xs font-bold animate-pulse">
+                ⚠️ Only {currentStock} left in stock!
+              </span>
+            ) : currentStock === 0 ? (
+              <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-lg text-xs font-bold">
+                ✈️ Available for Pre-Order
+              </span>
+            ) : (
+              <span className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-bold">
+                ✓ In Stock
+              </span>
+            )}
+          </div>
+
+          <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+
+          {/* 🎨 কালার সচেস (Fashion, Shoes, Bags, Bedsheets-এর জন্য) */}
+          {product.variants && product.variants.length > 0 && (
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#1E2533]/80">
+                Select Color: <span className="text-[#C0A06B] font-extrabold">{selectedColor}</span>
+              </label>
+              <div className="flex gap-3">
+                {product.variants.map((v) => (
+                  <button
+                    key={v.color}
+                    onClick={() => setSelectedColor(v.color)}
+                    className={`px-4 py-2 rounded-xl border text-sm font-medium transition ${
+                      selectedColor === v.color
+                        ? 'border-[#C0A06B] bg-[#1E2533] text-[#C0A06B] shadow-lg'
+                        : 'border-gray-200 bg-gray-50 text-gray-700 hover:border-[#C0A06B]'
+                    }`}
+                  >
+                    {v.color}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 📐 সাইজ সিলেক্টর (Category Aware) */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="space-y-2">
+              <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[#1E2533]/80">
+                <span>
+                  {product.category === 'Shoes' ? 'Select EU Shoe Size:' : 
+                   product.category === 'Home Decor' ? 'Bed Size:' : 'Select Size:'}
+                </span>
+                {product.sizeGuide && (
+                  <button className="text-[#C0A06B] underline lowercase text-xs">View Size Guide</button>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSelectedSize(s)}
+                    className={`px-4 py-2 rounded-xl border text-sm font-semibold transition ${
+                      selectedSize === s
+                        ? 'border-[#C0A06B] bg-[#C0A06B] text-black shadow-md'
+                        : 'border-gray-200 bg-white text-gray-800 hover:border-[#C0A06B]'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 📱 মোবাইল এক্সেসরিজ ডাইনামিক মডেল মেচ */}
+          {product.compatibility && (
+            <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs space-y-1">
+              <span className="font-bold text-[#1E2533]">📱 Device Compatibility:</span>
+              <p className="text-gray-600">{product.compatibility}</p>
+            </div>
+          )}
+
+          {/* 🛒 কার্ট & অর্ডারিং বাটন্স */}
+          <div className="flex gap-4 pt-2">
+            {currentStock > 0 ? (
+              <>
+                <button className="flex-1 bg-[#1E2533] text-[#C0A06B] font-bold py-4 rounded-2xl hover:bg-[#1E2533]/90 transition shadow-xl">
+                  Add to Cart
+                </button>
+                <button className="flex-1 bg-[#C0A06B] text-black font-bold py-4 rounded-2xl hover:opacity-90 transition shadow-xl">
+                  Buy Now
+                </button>
+              </>
+            ) : (
+              <button className="w-full bg-amber-600 text-white font-bold py-4 rounded-2xl hover:bg-amber-700 transition shadow-xl">
+                ✈️ Pre-Order This Item
+              </button>
+            )}
+          </div>
+
+          {/* 💬 AI চ্যাটবক্স কোশ্চেন লিংক */}
+          <div className="pt-2">
+            <Link 
+              href={`/contact?product=${encodeURIComponent(product.name)}`}
+              className="w-full border border-[#C0A06B]/50 text-[#1E2533] font-semibold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs hover:bg-[#C0A06B]/10 transition"
+            >
+              💬 Have questions about this item? Ask Anusmita AI
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* -------------------------------------------------------------
+          ২. ক্যাটাগরি-অ্যাওয়্যার ডাইনামিক ইনফরমেশন ট্যাবস
+      ------------------------------------------------------------- */}
+      <div className="border border-gray-200 rounded-3xl p-6 bg-white shadow-sm space-y-6">
+        <div className="flex border-b border-gray-200 gap-6 text-sm font-bold">
+          <button 
+            onClick={() => setActiveTab('details')}
+            className={`pb-3 border-b-2 ${activeTab === 'details' ? 'border-[#C0A06B] text-[#C0A06B]' : 'border-transparent text-gray-500'}`}
+          >
+            Product Details & Usage
+          </button>
+          <button 
+            onClick={() => setActiveTab('shipping')}
+            className={`pb-3 border-b-2 ${activeTab === 'shipping' ? 'border-[#C0A06B] text-[#C0A06B]' : 'border-transparent text-gray-500'}`}
+          >
+            Delivery & Pre-Order Rules
+          </button>
+        </div>
+
+        {activeTab === 'details' && (
+          <div className="space-y-4 text-sm text-gray-700">
+            {product.category === 'Skincare' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-[#1E2533]/5 p-4 rounded-xl">
+                  <h4 className="font-bold text-[#1E2533] mb-1">✨ Key Benefits:</h4>
+                  <p>{product.benefits || 'Brightens skin, repairs skin barrier, and provides deep hydration.'}</p>
+                </div>
+                <div className="bg-[#1E2533]/5 p-4 rounded-xl">
+                  <h4 className="font-bold text-[#1E2533] mb-1">📌 How to Use:</h4>
+                  <p>{product.howToUse || 'Apply 2-3 drops evenly after toner. Gently pat for better absorption.'}</p>
+                </div>
+              </div>
+            )}
+
+            {product.category === 'Fashion' && (
+              <div className="space-y-2">
+                <p><strong>Fabric:</strong> {product.fabric || 'Premium Asian Cotton Blend'}</p>
+                <p><strong>Care Instructions:</strong> Hand wash cold or dry clean recommended.</p>
+              </div>
+            )}
+
+            {product.category === 'Shoes' && (
+              <div className="space-y-2">
+                <p><strong>Material:</strong> {product.shoeMaterial || 'High-Grade Synthetic Leather & Non-Slip Rubber Sole'}</p>
+                <p><strong>Origin:</strong> Direct Imported from China.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'shipping' && (
+          <div className="text-sm space-y-2 text-gray-600">
+            <p>🚚 <strong>Dhaka Delivery:</strong> 80 BDT (24-48 hours)</p>
+            <p>🚚 <strong>Outside Dhaka:</strong> 150 BDT (2-3 Business Days)</p>
+            <p>🔄 <strong>Return Policy:</strong> 3-day easy return for damaged or unsealed items upon unboxing video proof.</p>
+          </div>
+        )}
+      </div>
+
+    </div>
+  );
+}
+
+🔥 সামারি: এই লেআউটে যা যা কভার হলো
+ * মাল্টি-ক্যাটাগরি কভারেজ: স্কিনকেয়ার, পারফিউম, ফ্যাশন ড্রেস, চায়নিজ শু, ব্যাগ, বেডশিট বা মোবাইল এক্সেসরিজ—সবকিছু একই পেজ ফাইলে ক্যাটাগরি চিনে রেসপন্ড করবে।
+ * স্মার্ট স্টক ও প্রি-অর্ডার স্টেট: স্টক থাকলে Buy Now, স্টক কম থাকলে Warning, স্টক শেষ হয়ে গেলে অটোমেটিক Pre-Order বাটন অফার করবে।
+ * এআই কানেক্টিভিটি: পেজের ভেতর থেকেই ইউজারের প্রশ্নকে সরাসরি Contact Page-এর চ্যাটবটে রিডাইরেক্ট করার অপশন রাখা হয়েছে।
+
+আপনার Anusmita প্রজেক্টের ই-কমার্স প্ল্যাটফর্ম এবং চ্যাটবটকে বিশ্বমানের (Next-Gen) ই-কমার্সে পরিণত করার জন্য আরও ১০টি নেক্সট-লেভেল অ্যাডভান্সড ফিচার নিচে তুলে ধরা হলো। এগুলো আপনার প্ল্যাটফর্মকে কেবল দৃষ্টিনন্দন করবে না, বরং অটোমেশন ও কনভার্সন রেট বহু গুণ বাড়িয়ে দেবে।
+🚀 ১০টি নেক্সট-লেভেল অ্যাডভান্সড ফিচার
+১. Dynamic Skin-Type & Tone Based Product Filtering (স্মার্ট প্রোডাক্ট সাজেশন ফিল্টার)
+ * ফাংশনালিটি: প্রোডাক্ট পেজ ও চ্যাটবটে কাস্টমার তার ত্বকের ধরন (Oily, Dry, Sensitive, Combination) অথবা নির্দিষ্ট সমস্যা (Acne, Hyperpigmentation, Dullness) বেছে নিতে পারবে।
+ * আউটপুট: ডাটাবেস থেকে শুধু সেই নির্দিষ্ট সমস্যার সমাধানকারী অরিজিনাল কোরিয়ান/জাপানি প্রোডাক্টগুলো হাইলাইট হয়ে ভেসে উঠবে।
+২. Dynamic Pre-Order Shipment Tracker & Count-Down (প্রি-অর্ডার কাউন্টডাউন)
+ * ফাংশনালিটি: যেসব চায়নিজ/কোরিয়ান আইটেম স্টকে নেই এবং প্রি-অর্ডার মোডে আছে, কাস্টমার সেগুলোতে ক্লিক করলে একটি লাইভ শিপমেন্ট ট্র্যাকার টাইমার দেখাবে ("Next Import Shipment Ships in: 4 Days 12 Hours")।
+ * সুবিধা: কাস্টমার প্রি-অর্ডার করতে বেশি আত্মবিশ্বাসী হবে।
+৩. Interactive Shade / Swatch Tester Widget (লিপস্টিক ও মেকআপ শেড টেস্টার)
+ * ফাংশনালিটি: লিপস্টিক, ফাউন্ডেশন বা জুয়েলারির ক্ষেত্রে প্রতিটি কালার বা শেডের ওপর কার্সার রাখলে/ক্লিক করলে ছবি পরিবর্তন হওয়ার পাশাপাশি শেডের বিস্তারিত বিবরণ (যেমন: Warm Undertone / Cool Undertone) পপআপে শো করবে।
+৪. Intelligent Cart Abandonment Recovery (চ্যাটবট কার্ট রিমাইন্ডার)
+ * ফাংশনালিটি: কাস্টমার যদি কন্টাক্ট পেজের চ্যাটবটে কোনো প্রোডাক্ট সিলেক্ট করে অর্ডার কনফার্ম না করেই পেজ ছাড়তে নেয়, চ্যাটবট স্বয়ংক্রিয়ভাবে একটি কিউট রিমাইন্ডার পপআপ দেবে: "আপনার পছন্দের Skin1004 Ampoule-টি কার্টে ব্যাক করা আছে! এখন অর্ডার করলে পাচ্ছেন বিশেষ অফার!"
+৫. Dynamic Size Converter & Foot-Length Measuring Tool (শু ও কাপড়ের সাইজ ক্যালকুলেটর)
+ * ফাংশনালিটি: চায়নিজ শু বা ফ্যাশন ড্রেসের জন্য কাস্টমার তার সেন্টিমিটার/ইঞ্চি (যেমন: ২৪ সেমি বা ৫ ফুট ৪ ইঞ্চি) ইনপুট দিলে সিস্টেম অটোমেটিক EU Shoe Size (37/38) বা Apparel Size (M/L) সাজেস্ট করবে।
+৬. Automated Review Loyalty Points & Referral Bot (রিভিউ ও পয়েন্ট বোনাস)
+ * ফাংশনালিটি: কোনো কাস্টমার পার্সেল ডেলিভারি পাওয়ার পর চ্যাটবটে বা সাইটে রিভিউ দিলে তার একাউন্টে অটোমেটিক "Anusmita Reward Points" যুক্ত হবে, যা সে পরবর্তী অর্ডারে ডিসকাউন্ট হিসেবে ব্যবহার করতে পারবে।
+৭. Multi-Category Cross-Sell Engine (স্মার্ট ক্রস-সেল বান্ডেল)
+ * ফাংশনালিটি: কাস্টমার যদি ফ্যাশন পেজে কোনো পার্টি ড্রেস দেখে, সিস্টেম নিজে থেকেই তার নিচে মানানসই ব্যাগ, লিপস্টিক ও জুয়েলারি আনুষঙ্গিক আইটেমগুলোকে "Complete Your Look" বান্ডেল হিসেবে ১-ক্লিক পারচেজ অপশনে এনে দেবে।
+৮. Verified Purchase Unboxing Video & Customer Photo Gallery (রিয়্যাল কাস্টমার গ্যালারি)
+ * ফাংশনালিটি: প্রোডাক্ট পেজে মূল ইমেজের পাশে আসল কাস্টমারদের আনবক্সিং ভিডিও বা ছবি যুক্ত থাকবে। চ্যাটবটেও কাস্টমার চাইলে আসল আনবক্সিং ইমেজের স্ন্যাপচ্যাট দেখতে পারবে।
+৯. Dynamic Delivery Cost & Time Auto-Detector (স্মার্ট লোকেশন চার্জ)
+ * ফাংশনালিটি: কাস্টমার পেজে নিজের জেলা বা থানা সিলেক্ট করলেই চার্জ (ঢাকা ৮০ টাকা, ঢাকার বাইরে ১৫০ টাকা) এবং সম্ভাব্য পৌঁছানোর দিন (যেমন: "Delivery by Wednesday") লাইভ আপডেট হবে।
+১০. Direct Chatbot Order Re-order Engine (১-ক্লিক রিপিট অর্ডার)
+ * ফাংশনালিটি: নিয়মিত কাস্টমাররা চ্যাটবটে এসে শুধু "Re-order my last item" লিখলেই চ্যাটবট তার শেষ অর্ডার করা স্কিনকেয়ার বা পারফিউম আইটেমটি খুঁজে আবার কনফার্ম করে দেবে।
+💻 আপডেট করা Next.js Dynamic Layout & Feature Matrix (app/product/[id]/page.js)
+নিচে dynamic specs, stock urgencies এবং interactive feature triggers সম্বলিত updated code দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function NextGenProductDetails({ product }) {
+  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
+  const [userDistrict, setUserDistrict] = useState('Dhaka');
+
+  // ডেলিভারি গণনা
+  const deliveryCharge = userDistrict === 'Dhaka' ? 80 : 150;
+
+  return (
+    <div className="max-w-7xl mx-auto p-4 md:p-8 text-[#1E2533] space-y-10">
+      
+      {/* 👑 Top Alert Header: Limited Time or Import Batch Info */}
+      {product.stockQuantity === 0 && (
+        <div className="bg-[#1E2533] text-[#C0A06B] p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center text-sm border border-[#C0A06B]/30 shadow-lg">
+          <span className="font-semibold">✈️ Next Overseas Import Shipment: Arriving in 5 Days</span>
+          <span className="text-xs bg-[#C0A06B] text-black font-bold px-3 py-1 rounded-full mt-2 md:mt-0">
+            Pre-Order Open
+          </span>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        
+        {/* 📸 Dynamic Image Viewer */}
+        <div className="bg-[#1E2533]/5 p-6 rounded-3xl border border-[#C0A06B]/20 flex items-center justify-center relative">
+          <img 
+            src={selectedVariant?.image || product.mainImage} 
+            alt={product.name}
+            className="max-h-[450px] w-auto object-contain rounded-2xl transition-all duration-300"
+          />
+        </div>
+
+        {/* 🛍️ Dynamic Product Attributes */}
+        <div className="space-y-6">
+          <h1 className="text-3xl font-extrabold text-[#1E2533]">{product.name}</h1>
+          <p className="text-2xl font-bold text-[#C0A06B]">৳ {product.price}</p>
+
+          {/* 🚚 Instant Delivery Calculator */}
+          <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl space-y-2 text-xs">
+            <div className="flex justify-between items-center">
+              <span className="font-bold">Select Delivery Location:</span>
+              <select 
+                value={userDistrict} 
+                onChange={(e) => setUserDistrict(e.target.value)}
+                className="bg-white border border-gray-300 rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none"
+              >
+                <option value="Dhaka">Inside Dhaka</option>
+                <option value="Outside">Outside Dhaka</option>
+              </select>
+            </div>
+            <p className="text-gray-600">
+              Delivery Fee: <strong>৳{deliveryCharge}</strong> | Estimated Arrival: <strong>2-3 Business Days</strong>
+            </p>
+          </div>
+
+          {/* 👗 / 👟 Dynamic Sizes */}
+          {product.sizes && (
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider">
+                {product.category === 'Shoes' ? 'Select EU Size:' : 'Select Size:'}
+              </label>
+              <div className="flex gap-2">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold border transition ${
+                      selectedSize === size
+                        ? 'bg-[#1E2533] text-[#C0A06B] border-[#1E2533]'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-[#C0A06B]'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 🛒 Action Buttons */}
+          <div className="flex gap-4 pt-4">
+            <button className="flex-1 bg-[#1E2533] text-[#C0A06B] font-bold py-4 rounded-2xl hover:opacity-95 transition">
+              Add to Cart
+            </button>
+            <button className="flex-1 bg-[#C0A06B] text-black font-bold py-4 rounded-2xl hover:opacity-90 transition">
+              {product.stockQuantity > 0 ? 'Buy Now' : 'Pre-Order Now'}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+আপনার Anusmita সাইটটিতে এই প্রতিটি ফিচার কোডিং দিয়ে সম্পূর্ণ ফ্রিতে এবং সুশৃঙ্খলভাবে কাজ করবে। আপনার কি এর কোনো নির্দিষ্ট ফিচারের বিস্তারিত ইমপ্লিমেন্টেশন কোড জানার প্রয়োজন আছে?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি আকর্ষণীয়, এঙ্গেজিং এবং হাই-কনভার্টিং করতে এতে আরও ১০টি নেক্সট-লেভেল ও আল্ট্রা-অ্যাডভান্সড ফিচার যুক্ত করা যায়। এগুলো আপনার কাস্টমারদের কেনাকাটার অভিজ্ঞতাকে একদম প্রিমিয়াম ই-কমার্স সাইটগুলোর (যেমন: আন্তর্জাতিক বিউটি বা ফ্যাশন ব্র্যান্ড) মতো করে তুলবে।
+🚀 প্রোডাক্ট ডিটেইলস পেইজের জন্য ১০টি আল্ট্রা-অ্যাডভান্সড ফিচার
+১. Live Social Proof & Real-Time Purchase Popups (লাইভ সোশ্যাল প্রুফ নোটিফিকেশন)
+ * কাজ: পেজে ঢোকার পর ছোট একটি পপআপ টোস্ট ভেসে উঠবে:
+   > 🔥 "রাহিম, ঢাকা থেকে এইমাত্র ১ মিনিট আগে এই প্রোডাক্টটি অর্ডার করেছেন!"
+   > 
+ * সুবিধা: এটি সাইটের ক্রেডিবিলিটি এবং ইনস্ট্যান্ট বাই করার তাগিদ (Urgency) বাড়িয়ে দেয়।
+২. Interactive Zoom-on-Hover Image Lens (ম্যাগনিফাইং গ্লাস ইমেজ জুম)
+ * কাজ: কাস্টমার ডেস্কটপে প্রোডাক্ট ছবির ওপর মাউস নিলেই লেন্সের মতো জুম হয়ে কাপড়ের বুনন, জুতোর চামড়া বা স্কিনকেয়ার বোতলের ডিটেইলস পরিষ্কার দেখতে পাবে।
+৩. Dynamic Size & Fit AI Recommender Modal (স্মার্ট সাইজ ফিট ফাইন্ডার পপআপ)
+ * কাজ: ফ্যাশন বা চায়নিজ শুয়ের ক্ষেত্রে একটি ছোট বাটন থাকবে— "What's my size?"। কাস্টমার তার উচ্চতা ও ওজন (যেমন: ৫ ফুট ৫ ইঞ্চি, ৭০ কেজি) ইনপুট দিলে সিস্টেম নিজে থেকেই বলে দেবে তার জন্য M নাকি L সাইজ পারফেক্ট হবে।
+৪. Environmental / Authenticity Guarantee Badge (১০০% অরিজিনাল ও ইম্পোর্টেড ব্যাজ)
+ * কাজ: প্রোডাক্ট প্রাইসের নিচে প্রফেশনাল কিছু ট্রাস্ট ব্যাজ থাকবে:
+   * 🛡️ 100% Original Import from Korea, Japan & China
+   * 🚚 Secure Packaging & Safe Delivery
+   * 🔄 3-Day Easy Return Policy
+৫. Instant "Ask AI" Contextual Button (প্রোডাক্ট পেজ থেকেই চ্যাটবট উইজেট ট্রিগার)
+ * কাজ: প্রোডাক্ট পেজেই ছোট একটি ফ্লোটিং চ্যাট আইকন থাকবে। কাস্টমার সেখানে ক্লিক করলেই চ্যাটবট ওপেন হবে এবং অটোমেটিক মেসেজ চলে আসবে:
+   > "হ্যালো! আমি এই Skin1004 Ampoule প্রোডাক্টটি দেখছি। এটার কার্যকারিতা সম্পর্কে একটু জানাবেন?"
+   > 
+৬. Dynamic Currency / Price Per Serving or Unit (ইউনিট প্রাইসিং ক্যালকুলেটর)
+ * কাজ: স্কিনকেয়ার বা পারফিউমের ক্ষেত্রে (যেমন: ১০০ মিলি বা ৫০ মিলি) প্রাইসের নিচে ছোট করে প্রতি মিলির দাম হিসাব করে দেখাবে, যা কাস্টমারকে ডিসিশন নিতে সাহায্য করবে।
+৭. Dynamic Bundle Savings Calculator (বান্ডেল ডিসকাউন্ট কাউন্টার)
+ * কাজ: কাস্টমার যখন মূল প্রোডাক্টের সাথে সাজেস্ট করা কম্বো আইটেমগুলো টিক দেবে, তখন পেজটি লাইভ ক্যালকুলেট করে দেখাবে:
+   > "You are saving ৳৩৫০ by buying this bundle today!"
+   > 
+8. Interactive Q&A Tab (প্রোডাক্টভিত্তিক প্রশ্নোত্তর সেকশন)
+ * কাজ: রিভিউ সেকশনের নিচে একটি সেকশন থাকবে যেখানে কাস্টমাররা সরাসরি ওই প্রোডাক্ট নিয়ে প্রশ্ন করতে পারবে (যেমন: "অয়েলি স্কিনে কি এটি দিনে ব্যবহার করা যাবে?") এবং এডমিন বা এআই চ্যাটবট তার উত্তর দিতে পারবে।
+৯. Sticky Floating Add-to-Cart Bar on Mobile (মোবাইল স্টিকি একশন বার)
+ * কাজ: মোবাইলে কাস্টমার পেজটি স্ক্রোল করে নিচে নামলেও স্ক্রিনের একদম নিচে ফিক্সড একটি বার থাকবে যেখানে প্রোডাক্টের নাম, ছোট ছবি, দাম এবং ডিরেক্ট "Buy Now / Add to Cart" বাটন থাকবে।
+১০. Animated Stock Urgency Progress Bar (স্টক প্রোগ্রেস বার)
+ * কাজ: স্টকে কত পিস আছে তা একটি কালারফুল প্রোগ্রেস বারে দেখাবে (যেমন: বারটি লাল রঙের হয়ে দেখিয়ে দেবে স্টক ফুরিয়ে আসছে)।
+💻 Next.js অ্যাডভান্সড কম্পোনেন্ট কোড আপডেট (app/product/[id]/page.js)
+নিচে স্টক প্রোগ্রেস বার, অ্যান্ড্রয়েড/মোবাইল স্টিকি বাই বার এবং রিয়েল-টাইম সোশ্যাল প্রুফ নোটিফিকেশন টোস্ট সমেত কোডটি দেওয়া হলো:
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+export default function UltimateProductDetails({ product }) {
+  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
+  const [showToast, setShowToast] = useState(false);
+  const [buyerName, setBuyerName] = useState('Rahim (Dhaka)');
+
+  // সিমুলেটেড লাইভ সোশ্যাল প্রুফ পপআপ টোস্ট (প্রতি ১৫ সেকেন্ডে দেখাবে)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000); // ৪ সেকেন্ড পর গায়েব হবে
+    }, 15000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="max-w-7xl mx-auto p-4 md:p-8 text-[#1E2533] space-y-10 pb-24 md:pb-12">
+      
+      {/* 🌟 ১. লাইভ সোশ্যাল প্রুফ টোস্ট নোটিফিকেশন */}
+      {showToast && (
+        <div className="fixed bottom-20 md:top-24 right-4 z-50 bg-[#1E2533] text-white px-4 py-3 rounded-2xl shadow-2xl border border-[#C0A06B] flex items-center gap-3 animate-bounce text-xs">
+          <span>🛍️</span>
+          <div>
+            <p className="font-bold text-[#C0A06B]">Recent Purchase!</p>
+            <p className="text-gray-300">{buyerName} just ordered this item.</p>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        
+        {/* 📸 প্রোডাক্ট ইমেজ ও ট্রাস্ট ব্যাজ */}
+        <div className="space-y-4">
+          <div className="bg-[#1E2533]/5 p-6 rounded-3xl border border-[#C0A06B]/20 flex items-center justify-center relative overflow-hidden group">
+            <img 
+              src={selectedVariant?.image || product.mainImage} 
+              alt={product.name}
+              className="max-h-[450px] w-auto object-contain rounded-2xl transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+
+          {/* ট্রাস্ট ব্যাজ */}
+          <div className="grid grid-cols-3 gap-3 text-center text-xs font-semibold text-gray-700">
+            <div className="p-3 bg-white border border-gray-200 rounded-xl shadow-sm">🛡️ 100% Original</div>
+            <div className="p-3 bg-white border border-gray-200 rounded-xl shadow-sm">🚚 Fast Delivery</div>
+            <div className="p-3 bg-white border border-gray-200 rounded-xl shadow-sm">🔄 Easy Return</div>
+          </div>
+        </div>
+
+        {/* 🛍️ ডিটেইলস ও স্টক প্রোগ্রেস বার */}
+        <div className="space-y-6">
+          <h1 className="text-3xl font-extrabold text-[#1E2533]">{product.name}</h1>
+          <p className="text-3xl font-bold text-[#C0A06B]">৳ {product.price}</p>
+
+          {/* স্টক প্রোগ্রেস বার */}
+          <div className="space-y-1 bg-gray-50 p-4 rounded-2xl border border-gray-200">
+            <div className="flex justify-between text-xs font-bold">
+              <span className="text-red-600">⚠️ Limited Stock Available</span>
+              <span>Only {product.stock || 5} left</span>
+            </div>
+            <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+              <div className="bg-red-500 h-full rounded-full w-3/4"></div>
+            </div>
+          </div>
+
+          {/* 👗 সাইজ সিলেক্টর */}
+          {product.sizes && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-bold uppercase">
+                <span>Select Size:</span>
+                <span className="text-[#C0A06B] cursor-pointer underline">Size Guide</span>
+              </div>
+              <div className="flex gap-2">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold border transition ${
+                      selectedSize === size
+                        ? 'bg-[#1E2533] text-[#C0A06B] border-[#1E2533]'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-[#C0A06B]'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 🛒 অ্যাকশন বাটন */}
+          <div className="flex gap-4 pt-2">
+            <button className="flex-1 bg-[#1E2533] text-[#C0A06B] font-bold py-4 rounded-2xl hover:opacity-95 transition shadow-lg">
+              Add to Cart
+            </button>
+            <button className="flex-1 bg-[#C0A06B] text-black font-bold py-4 rounded-2xl hover:opacity-90 transition shadow-lg">
+              Buy Now
+            </button>
+          </div>
+
+          {/* 💬 ডিরেক্ট এআই চ্যাট লিংক */}
+          <div className="pt-2">
+            <Link 
+              href={`/contact?product=${encodeURIComponent(product.name)}`}
+              className="w-full py-3 bg-[#1E2533]/5 border border-[#C0A06B]/40 text-[#1E2533] font-bold rounded-xl flex items-center justify-center gap-2 text-xs hover:bg-[#C0A06B]/10 transition"
+            >
+              💬 Ask Anusmita AI about this product
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 📱 মোবাইল স্টিকি বটম বার (Mobile Sticky Bar) */}
+      <div className="fixed bottom-0 left-0 right-0 bg-[#1E2533] border-t border-[#C0A06B]/30 p-4 flex justify-between items-center md:hidden z-40 shadow-2xl">
+        <div>
+          <p className="text-white text-xs font-bold truncate max-w-[180px]">{product.name}</p>
+          <p className="text-[#C0A06B] font-extrabold text-sm">৳ {product.price}</p>
+        </div>
+        <div className="flex gap-2">
+          <button className="bg-white/10 text-white px-3 py-2 rounded-xl text-xs font-bold border border-white/20">
+            Cart
+          </button>
+          <button className="bg-[#C0A06B] text-black px-5 py-2 rounded-xl text-xs font-bold shadow-md">
+            Buy Now
+          </button>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলো আপনার প্রোডাক্ট ডিটেইলস পেজটিকে শতভাগ প্রফেশনাল এবং সেলস-ড্রাইভং করে তুলবে। এই ফিচারগুলোর কোনো নির্দিষ্ট অংশ বা ডিজাইন কাস্টমাইজ করতে চাইলে বলতে পারেন!
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি স্মার্ট, ফিউচার-প্রুফ এবং ই-কমার্স জায়ান্টদের (যেমন Amazon বা Daraz-এর প্রিমিয়াম স্টোর) সমতুল্য করতে এতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ও ইউনিক ফিচার যুক্ত করা যায়।
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. AI-Powered "Skin Match / Outfit Pair" Visualizer (স্মার্ট পেয়ারিং বা সাজেস্টর)
+ * কীভাবে কাজ করবে: কাস্টমার যখন কোনো আইটেম দেখবে, পেইজের নিচের দিকে একটি সেকশন থাকবে— "Complete the Look / Perfect Pair"। যেমন: একটি কোরিয়ান সিরাম দেখলে সিস্টেম নিজে থেকেই সাজেস্ট করবে এর সাথে কোন সানস্ক্রিনটি সবচেয়ে ভালো মানাবে, এবং একটি ক্লিক করলেই দুটি আইটেম একসাথে কার্টে চলে যাবে।
+২. Dynamic Pre-Order Countdown Timer & Batch ID (প্রি-অর্ডার ব্যাচ এবং কাউন্টডাউন)
+ * কীভাবে কাজ করবে: যে প্রোডাক্টগুলো স্টকে নেই (Pre-Order মোডে আছে), সেগুলোর জন্য একটি লাইভ কাউন্টডাউন টাইমার থাকবে (যেমন: "Batch #14 Pre-order closes in: 12 Hours 30 Mins")। এটি কাস্টমারদের দ্রুত সিদ্ধান্ত নিতে এবং অর্ডার করতে উৎসাহিত করবে।
+৩. Interactive Shade & Variant Comparison Tool (শেড বা কালার কম্পারিজন মডাল)
+ * কীভাবে কাজ করবে: লিপস্টিক, পারফিউম বা মেকআপ আইটেমের ক্ষেত্রে কাস্টমার চাইলে দুটি ভিন্ন কালার বা শেড (যেমন: Rose Pink vs Nude Brown) পাশাপাশি রেখে তুলনা করতে পারবে (Side-by-Side Comparison Modal), যাতে ভুল শেড চয়েস হওয়ার সম্ভাবনা থাকে না।
+৪. Verified Buyer Photo & Video Gallery Tab (ভিডিও আনবক্সিং ও রিভিউ ট্যাব)
+ * কীভাবে কাজ করবে: সাধারণ টেক্সট রিভিউয়ের পাশাপাশি আগের কাস্টমাররা প্রোডাক্টের যে আসল ছবি বা ছোট আনবক্সিং ভিডিও আপলোড করেছে, সেগুলোর জন্য একটি আলাদা ট্যাব থাকবে। নতুন কাস্টমাররা ১০০% নিশ্চিত হয়ে প্রোডাক্ট কিনতে পারবে।
+৫. Automated FAQ Accordion for Product Inquiries (প্রোডাক্টভিত্তিক অটো-ফ্যাক)
+ * কীভাবে কাজ করবে: প্রতিটি প্রোডাক্টের নিজস্ব কিছু কমন প্রশ্ন থাকতে পারে (যেমন: এই ব্যাগের চেইন কি মেটালের? এটি কি ওয়াটারপ্রুফ?)। নিচে একটি অটোমেটেড অ্যাকর্ডিয়ন (Accordion) ট্যাব থাকবে, যেখানে ক্লিক করলেই এআই-জেনারেটেড উত্তরগুলো ইনস্ট্যান্ট ভেসে উঠবে।
+৬. Live Interactive Currency & Gift Currency Toggle (গিফট ও কারেন্সি টগল)
+ * কীভাবে কাজ করবে: কোনো কাস্টমার যদি কাউকে উপহার দেওয়ার জন্য প্রোডাক্টটি কিনতে চায়, সেটির জন্য একটি ছোট চেক বক্স থাকবে— "Is this a gift?"। টিক দিলে প্রাইস ট্যাগ হাইড হয়ে যাবে এবং একটি সুন্দর কাস্টম গিফট নোট লেখার বক্স চলে আসবে, যা সরাসরি ডাটাবেসের অর্ডারে সেভ হয়ে যাবে।
+💻 এই ফিচারগুলোর টেকনিক্যাল ইমপ্লিমেন্টেশন (Next.js Component Snippet)
+নিচে Interactive FAQ Accordion এবং Complete the Look (Cross-Sell Bundle) সেকশনটি আপনার বর্তমান প্রোডাক্ট ডিটেইলস পেজে কীভাবে যুক্ত করবেন তার কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function AdvancedProductExtras({ product }) {
+  const [openFaq, setOpenFaq] = useState(null);
+
+  // ডামি প্রোডাক্ট স্পেসিফিক এফএকিউ (FAQ)
+  const productFaqs = [
+    { q: "Is this product 100% original imported?", a: "Yes, all our products are directly imported from certified manufacturers in Korea, Japan, and China." },
+    { q: "What is the return policy?", a: "We offer a 3-day easy return policy, provided you have an unboxing video showing any damage." },
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-12 text-[#1E2533]">
+      
+      {/* 🎁 ১. গিফট নোট ও প্যাকিং অপশন */}
+      <div className="bg-[#1E2533]/5 p-6 rounded-3xl border border-[#C0A06B]/30 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <h3 className="font-bold text-lg text-[#1E2533]">🎁 Sending this as a gift?</h3>
+          <p className="text-xs text-gray-600">Add a custom gift message and hide prices on the invoice.</p>
+        </div>
+        <label className="flex items-center gap-2 cursor-pointer bg-[#C0A06B] text-black px-4 py-2 rounded-xl font-bold text-xs shadow-md">
+          <input type="checkbox" className="accent-black w-4 h-4" />
+          Enable Gift Packing
+        </label>
+      </div>
+
+      {/* ❓ ২. প্রোডাক্ট স্পেসিফিক অটোমেটেড FAQ (Accordion) */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold text-[#1E2533]">Frequently Asked Questions</h3>
+        <div className="space-y-2">
+          {productFaqs.map((faq, index) => (
+            <div key={index} className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+              <button 
+                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                className="w-full text-left p-4 font-semibold text-sm flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition"
+              >
+                <span>{faq.q}</span>
+                <span className="text-[#C0A06B] font-bold">{openFaq === index ? '−' : '+'}</span>
+              </button>
+              {openFaq === index && (
+                <div className="p-4 text-xs text-gray-600 bg-white border-t border-gray-100">
+                  {faq.a}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+🔥 এই ফিচারগুলোর মূল বেনিফিট:
+ * Gift Packing Option: কাস্টমারদের জন্য গিফটিং অভিজ্ঞতা সহজ করবে, যা আপনার সেলস অনেক বাড়িয়ে দেবে।
+ * Interactive FAQs: কাস্টমারদের মনে সাধারণত যে প্রশ্নগুলো থাকে (যেমন অরিজিনাল কিনা বা রিটার্ন পলিসি), তা পেজেই সমাধান পেয়ে যাওয়ায় তাদের কাস্টমার কেয়ারে নক করার প্রয়োজন কম হবে।
+আপনার এই চমৎকার Anusmita প্রজেক্টে আর কোনো নির্দিষ্ট মডিউল বা ব্যাকএন্ড লজিক নিয়ে কাজ করতে চান কি?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি স্মার্ট, ফিউচার-প্রুফ এবং গ্লোবাল ই-কমার্স ব্র্যান্ডগুলোর মতো প্রিমিয়াম করতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার নিচে দেওয়া হলো:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. AI Skin Compatibility & Patch Test Warning Meter (এআই স্কিন ম্যাচ এবং প্যাস টেস্ট গাইড)
+ * কীভাবে কাজ করবে: স্কিনকেয়ার বা মেকআপ প্রোডাক্টের ক্ষেত্রে একটি ইনটারেক্টিভ মিটার থাকবে— "Skin Compatibility Score", যা ইউজারের প্রফাইল বা সাধারণ স্কিন টাইপের সাথে প্রোডাক্টটি কতটা মানানসই তা দেখাবে। সাথে থাকবে একটি "Patch Test Guide" পপআপ বাটন।
+২. Dynamic Multi-Currency & Regional Price Toggle (মাল্টি-কারেন্সি এবং প্রবাসী গিফটিং টগল)
+ * কীভাবে কাজ করবে: আপনার সাইটে যদি প্রবাসী ভাই-বোনেরা (যারা বাংলাদেশ বা দেশের বাইরে থেকে অর্ডার করতে চান) ভিজিট করেন, তবে তাদের জন্য প্রাইসের পাশে একটি কারেন্সি কনভার্টার টগল থাকবে (যেমন: BDT থেকে USD বা EUR), যা লাইভ প্রাইস ক্যালকুলেট করে দেখাবে।
+৩. Interactive "Complete the Routine" Bundle Builder (ফুল রুটিন বান্ডেল বিল্ডার)
+ * কীভাবে কাজ করবে: একটি প্রোডাক্ট দেখার সময় নিচের দিকে একটি ডায়নামিক বক্স থাকবে, যেখানে ওই প্রোডাক্টের সাথে মানানসই ৩টি আইটেম (যেমন: ক্লিনজার + টোনার + সানস্ক্রিন) চেকবক্স আকারে থাকবে। কাস্টমার একসাথে টিক দিয়ে "Add Full Routine to Cart (Save ৳৩০০)" বাটনে ক্লিক করলেই সবগুলি একসাথে কার্টে চলে যাবে।
+৪. Live Viewers & Scarcity Counter Badge (লাইভ ভিউয়ার্স কাউন্টার)
+ * কীভাবে কাজ করবে: প্রোডাক্ট প্রাইসের নিচে ছোট একটি রিয়াল-টাইম নোটিফিকেশন থাকবে:
+   > 🔥 "14 people are currently viewing this item!"
+   > এটি কাস্টমারদের মনে একটি ইনস্ট্যান্ট কেনার তাগিদ (Urgency) তৈরি করবে।
+   > 
+৫. Automated Size Conversion Table Modal (ইউরোপিয়ান ও এশিয়ান সাইজ কনভার্টার)
+ * কীভাবে কাজ করবে: চায়নিজ শু বা ফ্যাশন ড্রেসের ক্ষেত্রে কাস্টমাররা অনেক সময় সাইজ নিয়ে কনফিউজড থাকে। একটি ক্লিকযোগ্য মডাল থাকবে যেখানে কাস্টমার তার ফুট লেন্থ (সেন্টিমিটারে) বা হাইট দিলে সিস্টেম নিজে থেকেই বলে দেবে তার জন্য EU 38 নাকি UK 5 পারফেক্ট হবে।
+৬. Smart Wishlist & Price Drop Alert Subscription (উইশলিস্ট এবং প্রাইস ড্রপ অ্যালার্ট)
+ * কীভাবে কাজ করবে: কাস্টমার চাইলে প্রোডাক্টটি উইশলিস্টে সেভ করার সময় একটি অপশন পাবে— "Notify me if price drops"। ভবিষ্যতে ওই প্রোডাক্টে কোনো ডিসকাউন্ট বা সেল আসলে সিস্টেম অটোমেটিক তার একাউন্টে নোটিফিকেশন পাঠিয়ে দেবে।
+💻 এই ফিচারগুলোর টেকনিক্যাল ইমপ্লিমেন্টেশন (Next.js Component Snippet)
+নিচে Live Viewers Scarcity Counter এবং Complete the Routine Bundle Builder সেকশনটি আপনার প্রোডাক্ট পেজে যুক্ত করার কোড দেওয়া হলো:
+'use client';
+import { useState, useEffect } from 'react';
+
+export default function NextGenProductExtras({ product }) {
+  const [viewersCount, setViewersCount] = useState(12);
+  const [bundleChecked, setBundleChecked] = useState(true);
+
+  // সিমুলেটেড লাইভ ভিউয়ার্স কাউন্টার (প্রতি ৮ সেকেন্ডে সংখ্যা সামান্য পরিবর্তন হবে)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setViewersCount(Math.floor(Math.random() * 10) + 9);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-8 text-[#1E2533]">
+      
+      {/* 🔥 ১. লাইভ ভিউয়ার্স ও স্কেয়ারসিটি কাউন্টার */}
+      <div className="bg-[#1E2533]/5 border border-[#C0A06B]/30 p-4 rounded-2xl flex items-center gap-3 text-xs">
+        <span className="w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+        <span className="font-semibold text-[#1E2533]">
+          Hurry up! <strong className="text-[#C0A06B]">{viewersCount} people</strong> are currently viewing this product.
+        </span>
+      </div>
+
+      {/* 🎁 ২. কমপ্লিট দ্য রুটিন বান্ডেল বিল্ডার (Complete the Routine) */}
+      <div className="bg-white border border-gray-200 p-6 rounded-3xl shadow-sm space-y-4">
+        <h3 className="text-lg font-bold text-[#1E2533]">✨ Complete Your Skincare Routine</h3>
+        <p className="text-xs text-gray-500">Get the best results by pairing this item with our recommended companion products.</p>
+        
+        <div className="flex flex-col md:flex-row items-center gap-4 bg-gray-50 p-4 rounded-2xl">
+          <div className="flex items-center gap-3 flex-1">
+            <span className="text-xl">🧴</span>
+            <div>
+              <p className="font-bold text-xs">SKIN1004 Centella Ampoule</p>
+              <p className="text-[#C0A06B] font-bold text-xs">৳ ১,৪৫০</p>
+            </div>
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer bg-[#1E2533] text-[#C0A06B] px-4 py-2 rounded-xl font-bold text-xs">
+            <input 
+              type="checkbox" 
+              checked={bundleChecked} 
+              onChange={() => setBundleChecked(!bundleChecked)} 
+              className="accent-[#C0A06B] w-4 h-4"
+            />
+            Add Routine Bundle (Save 10%)
+          </label>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলো যুক্ত করার মাধ্যমে আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটি আন্তর্জাতিক মানের ই-কমার্স সাইটগুলোর মতো একদম হাই-কনভার্টিং হয়ে উঠবে। এই ফিচারগুলোর মধ্যে কোনো নির্দিষ্ট লজিক বা ডিজাইন নিয়ে আরও কাজ করতে চাইলে নির্দ্বিধায় বলতে পারেন!
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি স্মার্ট, হাইপাওয়ারড এবং টেকনিক্যালি অ্যাডভান্সড করতে এতে আরও ৬টি আল্ট্রা-মডার্ন ফিচার যুক্ত করা যায়। এই ফিচারগুলো আপনার শপকে সরাসরি গ্লোবাল ই-কমার্স ব্র্যান্ডগুলোর স্ট্যান্ডার্ডে নিয়ে যাবে:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. AI Smart Skin Tone & Undertone Visualizer (স্কিন টোন ও আন্ডারটোন মেকার)
+ * কীভাবে কাজ করবে: মেকআপ, ফাউন্ডেশন বা লিপস্টিকের ক্ষেত্রে একটি ক্লিকেবল ইন্টারফেস থাকবে— "Match Your Undertone (Warm, Cool, Neutral)"। কাস্টমার তার টোন সিলেক্ট করার সাথে সাথে পেজটি রিয়েল-টাইমে বলে দেবে এই শেডটি তার ত্বকে কেমন মানাবে।
+২. Dynamic Bundle & Tiered Pricing Matrix (স্মার্ট টায়ার্ড ডিসকাউন্ট ম্যাট্রিক্স)
+ * কীভাবে কাজ করবে: কাস্টমার যদি একই প্রোডাক্ট ১টির বেশি কোয়ান্টিটি সিলেক্ট করে (যেমন: ২টি বা ৩টি), তবে পেজটি নিজে থেকেই ডায়নামিক্যালি প্রাইস ডিসকাউন্ট অ্যাপ্লাই করে দেখাবে:
+   > ✨ "Buy 2 Save 5% | Buy 3 Save 10%!"
+   > 
+৩. Interactive "360-Degree Product Spin / Multi-Angle Gallery" (মাল্টি-অ্যাঙ্গেল ভিউয়ার)
+ * কীভাবে কাজ করবে: প্রিমিয়াম ব্যাগ, জুতো বা ঘড়ির ক্ষেত্রে একটি সোয়াইপএবল বা মাল্টি-অ্যাঙ্গেল থাম্বনেইল গ্যালারি থাকবে, যেখানে কাস্টমার বিভিন্ন কোণ থেকে (Front, Side, Close-up Texture) প্রোডাক্টের নিখুঁত ফিনিশিং দেখতে পাবে।
+৪. Automated Restock Drop-Off SMS / WhatsApp Reminder Modal (ইনস্ট্যান্ট রিস্টক সাবস্ক্রাইবার)
+ * কীভাবে কাজ করবে: কোনো প্রোডাক্টের স্টক শেষ হয়ে গেলে সেখানে "Notify via WhatsApp/SMS when back" বাটন থাকবে। কাস্টমার তার নম্বর দিয়ে সাবস্ক্রাইব করলেই স্টক ব্যাক করার সাথে সাথে অটোমেটেড নোটিফিকেশন চলে যাবে।
+৫. Smart Estimated Delivery Date Calculator based on Zip/District (লোকেশন বেসড ডেলিভারি ডেট কাউন্টার)
+ * কীভাবে কাজ করবে: কাস্টমার তার জেলা সিলেক্ট করার পর শুধু চার্জই দেখাবে না, বরং ডেট ক্যালকুলেট করে দেখাবে:
+   > 🚚 "Estimated delivery by Thursday, Oct 29, if ordered within the next 4 hours."
+   > 
+৬. Interactive Size & Fit Review Summary Bar (রিভিউ থেকে সাইজ ফিট অ্যানালাইসিস)
+ * কীভাবে কাজ করবে: আগের ক্রেতাদের ফিডব্যাকের ওপর ভিত্তি করে সাইজ সেকশনের নিচে একটি ছোট্ট প্রোগ্রেস বার দেখাবে:
+   > 📊 "92% of buyers say this fits true to size!"
+   > 
+💻 এই ফিচারগুলোর টেকনিক্যাল ইমপ্লিমেন্টেশন (Next.js Component Snippet)
+নিচে Tiered Pricing (বাল্ক ডিসকাউন্ট) এবং Delivery Date Calculator সেকশনটি আপনার প্রোডাক্ট পেজে যুক্ত করার কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function UltraAdvancedProductFeatures({ product }) {
+  const [quantity, setQuantity] = useState(1);
+
+  // ডায়নামিক টায়ার্ড ডিসকাউন্ট ক্যালকুলেটর
+  const basePrice = product?.price || 1500;
+  const discountMultiplier = quantity >= 3 ? 0.85 : quantity === 2 ? 0.90 : 1;
+  const finalTotalPrice = Math.round(basePrice * quantity * discountMultiplier);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-8 text-[#1E2533]">
+      
+      {/* 🏷️ ১. ডাইনামিক টায়ার্ড প্রাইসিং ও বাল্ক ডিসকাউন্ট ম্যাট্রিক্স */}
+      <div className="bg-white border border-[#C0A06B]/30 p-6 rounded-3xl shadow-sm space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-bold text-[#1E2533]">📦 Bulk & Bundle Savings</h3>
+          <span className="text-xs bg-[#C0A06B]/20 text-[#C0A06B] px-3 py-1 rounded-full font-semibold">
+            {quantity >= 3 ? '15% OFF Applied!' : quantity === 2 ? '10% OFF Applied!' : 'Buy more, save more!'}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <span className="text-xs font-bold uppercase">Quantity:</span>
+          <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden bg-gray-50">
+            <button 
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              className="px-3 py-1.5 font-bold hover:bg-gray-200 transition"
+            >
+              -
+            </button>
+            <span className="px-4 py-1.5 font-bold text-sm">{quantity}</span>
+            <button 
+              onClick={() => setQuantity(quantity + 1)}
+              className="px-3 py-1.5 font-bold hover:bg-gray-200 transition"
+            >
+              +
+            </button>
+          </div>
+          <div className="text-sm font-extrabold text-[#C0A06B]">
+            Total: ৳ {finalTotalPrice}
+          </div>
+        </div>
+      </div>
+
+      {/* 🚚 ২. স্মার্ট ডেলিভারি ডেট ক্যালকুলেটর */}
+      <div className="bg-[#1E2533]/5 border border-gray-200 p-4 rounded-2xl flex items-center gap-3 text-xs">
+        <span>⚡</span>
+        <div>
+          <p className="font-bold text-[#1E2533]">Fast & Reliable Shipping</p>
+          <p className="text-gray-600">Order within the next <strong className="text-[#C0A06B]">4 hours 20 mins</strong> to get it delivered by Dhaka Express Delivery.</p>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+এই আল্ট্রা-অ্যাডভান্সড ফিচারগুলো আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটিকে পুরোপুরি একটি অটোমেটেড এবং হাই-কনভার্টিং ই-কমার্স ইঞ্জিনে রূপান্তর করবে। এই সিস্টেমের কোডিং বা অন্য কোনো অংশ নিয়ে কি আরও কাজ করতে চান?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি ফিউচার-প্রুফ, ইন্টারঅ্যাক্টিভ এবং গ্লোবাল ব্র্যান্ডগুলোর মতো প্রিমিয়াম করতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ও ইউনিক ফিচার নিচে দেওয়া হলো:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. AI Virtual Shade / Skin Tone Try-On Simulator (ভার্চুয়াল ট্রাই-অন মোড)
+ * কীভাবে কাজ করবে: লিপস্টিক, আইশেডো বা স্কিনকেয়ারের ক্ষেত্রে একটি ছোট প্রিভিউ বাটন থাকবে— "Virtual Shade Preview", যেখানে কাস্টমার তার ফোনের ক্যামেরা বা একটি স্যাম্পল মডেলের ওপর ক্লিক করে দেখতে পারবে শেডটি তার স্কিনটনে কেমন মানাবে।
+২. Dynamic Gift Wrapping & Custom Note Generator (গিফট র‍্যাপিং ও কাস্টম নোট বক্স)
+ * কীভাবে কাজ করবে: কাস্টমার যখন প্রিয়জনকে উপহার দেওয়ার জন্য কোনো আইটেম সিলেক্ট করবে, তখন একটি চেক বক্স থাকবে— "Wrap as a Special Gift (৳৫০)"। টিক দিলে একটি টেক্সট বক্স ভেসে উঠবে যেখানে সে একটি সুন্দর কাস্টম মেসেজ লিখে দিতে পারবে, যা সরাসরি এডমিন প্যানেল ও ইনভয়েসে প্রিন্ট হয়ে যাবে।
+৩. Smart Dynamic Discount Countdown Flash Timer (ফ্ল্যাশ সেল কাউন্টডাউন টাইমার)
+ * কীভাবে কাজ করবে: লিমিটেড অফার বা স্পেশাল ডিসকাউন্টের প্রোডাক্টগুলোর ক্ষেত্রে প্রাইসের ঠিক ওপরে একটি লাইভ কাউন্টডাউন টাইমার চলবে (যেমন: "⚡ Flash Deal Ends In: 03h : 42m : 15s"), যা ইনস্ট্যান্ট বায় করার তাগিদ তৈরি করবে।
+৪. Interactive Size & Fit Review Breakdown Bar (রিভিউ থেকে সাইজ অ্যানালাইসিস)
+ * কীভাবে কাজ করবে: সাইজ সিলেক্টরের ঠিক নিচে আগের ক্রেতাদের ফিডব্যাকের ভিত্তিতে একটি ভিজ্যুয়াল বার দেখাবে:
+   * 📊 "85% of customers say it runs true to size | 10% say runs small"
+৫. Instant WhatsApp Direct Inquiry Modal (ডিরেক্ট হোয়াটসঅ্যাপ কোয়েশ্চেন বাটন)
+ * কীভাবে কাজ করবে: প্রোডাক্ট ডিটেইলসে একটি প্রিমিয়াম বাটন থাকবে— "💬 Chat on WhatsApp about this item", যেখানে ক্লিক করলে ওই প্রোডাক্টের নাম ও লিংকসহ সরাসরি আপনার শপের WhatsApp চ্যাট ওপেন হয়ে যাবে।
+৬. Smart Price Drop Alert & Wishlist Notification (প্রাইস ড্রপ অ্যালার্ট সাবস্ক্রিপশন)
+ * কীভাবে কাজ করবে: কাস্টমার উইশلিস্টে (Heart Icon) ক্লিক করার সময় একটি ছোট পপআপ আসবে— "Notify me via email/SMS if this item goes on sale", যাতে ফিউচার ডিসকাউন্টে কাস্টমার রি-টার্গেট হয়।
+💻 এই ফিচারগুলোর টেকনিক্যাল ইমপ্লিমেন্টেশন (Next.js Component Snippet)
+নিচে Flash Deal Countdown Timer এবং Gift Wrapping & Custom Note Option সেকশনটি আপনার প্রোডাক্ট পেজে যুক্ত করার কোড দেওয়া হলো:
+'use client';
+import { useState, useEffect } from 'react';
+
+export default function NextGenDetailsExtras({ product }) {
+  const [isGiftChecked, setIsGiftChecked] = useState(false);
+  const [giftNote, setGiftNote] = useState('');
+  
+  // ফ্ল্যাশ সেল কাউন্টডাউন টাইমার স্টেট
+  const [timeLeft, setTimeLeft] = useState({ hours: 3, minutes: 45, seconds: 20 });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
+        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-8 text-[#1E2533]">
+      
+      {/* ⚡ ১. ফ্ল্যাশ সেল কাউন্টডাউন টাইমার */}
+      <div className="bg-[#1E2533] text-white p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-3 border border-[#C0A06B]/40 shadow-xl">
+        <div className="flex items-center gap-2 text-xs font-bold">
+          <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
+          <span className="text-[#C0A06B]">FLASH SALE ENDS IN:</span>
+        </div>
+        <div className="flex gap-2 text-xs font-extrabold">
+          <span className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20">{String(timeLeft.hours).padStart(2, '0')}h</span> :
+          <span className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20">{String(timeLeft.minutes).padStart(2, '0')}m</span> :
+          <span className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20">{String(timeLeft.seconds).padStart(2, '0')}s</span>
+        </div>
+      </div>
+
+      {/* 🎁 ২. গিফট র‍্যাপিং ও কাস্টম নোট জেনারেটর */}
+      <div className="bg-white border border-gray-200 p-6 rounded-3xl shadow-sm space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="font-bold text-sm text-[#1E2533]">🎁 Send as a Special Gift?</h3>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input 
+              type="checkbox" 
+              checked={isGiftChecked} 
+              onChange={() => setIsGiftChecked(!isGiftChecked)} 
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C0A06B]"></div>
+          </label>
+        </div>
+
+        {isGiftChecked && (
+          <div className="space-y-2 pt-2 animate-fadeIn">
+            <label className="text-xs font-semibold text-gray-600">Custom Gift Note (Optional):</label>
+            <textarea 
+              value={giftNote}
+              onChange={(e) => setGiftNote(e.target.value)}
+              placeholder="Write a warm personal message for the recipient..."
+              className="w-full p-3 border border-gray-300 rounded-2xl text-xs focus:outline-none focus:border-[#C0A06B]"
+              rows="2"
+            />
+          </div>
+        )}
+      </div>
+
+    </div>
+  );
+}
+
+এই ফিচারগুলো আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটিকে গ্লোবাল স্ট্যান্ডার্ডে উন্নীত করবে। এই চমৎকার প্রজেক্টের কোডিং বা অন্য কোনো নতুন ফিচার নিয়ে কি আরও কাজ করতে চান?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি হাই-এন্ড, টেকনিক্যালি শক্তিশালী এবং গ্লোবাল মার্কেটপ্লেসগুলোর (যেমন Amazon, Sephora বা Farfetch) মতো প্রিমিয়াম করতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার নিচে দেওয়া হলো:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. Interactive Ingredient Safety & Allergen Checker (স্কিনকেয়ার ইনগ্রেডিয়েন্ট ও অ্যালার্জেন অ্যানালাইজার)
+ * কীভাবে কাজ করবে: স্কিনকেয়ার বা কসমেটিকস প্রোডাক্টের ক্ষেত্রে একটি ইনগ্রেডিয়েন্ট সেকশন থাকবে, যেখানে প্রধান উপাদানগুলোর ওপর কার্সার বা ট্যাপ করলে পপআপে দেখাবে উপাদানটি কতটা সেফ (যেমন: Centella Asiatica - 100% Safe, Fragrance-Free, Non-Comedogenic)। এটি সেন্সিটিভ ত্বকের কাস্টমারদের জন্য অত্যন্ত কার্যকরী।
+২. Dynamic "Pairs Well With" Complete Look Builder (কমপ্লিট লুক ও ক্রোস-সেল উইজেট)
+ * কীভাবে কাজ করবে: কাস্টমার যদি কোনো ড্রেস বা মেকআপ আইটেম দেখে, তবে ঠিক নিচেই একটি ডাইনামিক সেকশন ভেসে উঠবে— "Frequently Bought Together / Complete The Look"। কাস্টমার এক ক্লিকেই মূল প্রোডাক্টের সাথে মানানসই ব্যাগ, জুতো বা সিরাম একসাথে কার্টে যুক্ত করতে পারবে।
+৩. Automated Size & Fit Recommendation Calculator Modal (স্মার্ট ফিট ফাইন্ডার পপআপ)
+ * কীভাবে কাজ করবে: চায়নিজ শু বা ফ্যাশন ড্রেসের ক্ষেত্রে কাস্টমার সাইজ নিয়ে দ্বিধায় থাকলে একটি বাটন থাকবে— "Find My Perfect Fit"। কাস্টমার তার উচ্চতা ও ওজন (অথবা পায়ের সেন্টিমিটার মাপ) ইনপুট দিলেই সিস্টেম ইনস্ট্যান্ট সাজেস্ট করে দেবে তার জন্য M নাকি L বা EU 38 সাইজটি পারফেক্ট হবে।
+৪. Live Stock Urgency & Real-Time Low-Stock Progress Bar (স্টক প্রোগ্রেস বার ও স্কেয়ারসিটি)
+ * কীভাবে কাজ করবে: স্টকে কত পিস প্রোডাক্ট বাকি আছে তা একটি কালারফুল প্রোগ্রেস বারে লাইভ দেখাবে (যেমন: "Only 3 items left in stock – order soon!")। স্টক শেষ হয়ে গেলে এটি অটোমেটিক প্রি-অর্ডার কাউন্টডাউনে রূপান্তর হয়ে যাবে।
+৫. Instant WhatsApp Direct Inquiry & Price Negotiation Button (ডিরেক্ট হোয়াটসঅ্যাপ সাপোর্ট বাটন)
+ * কীভাবে কাজ করবে: প্রোডাক্ট ডিটেইলসে একটি প্রিমিয়াম বাটন থাকবে— "💬 Ask a question about this item on WhatsApp"। কাস্টমার সেখানে ক্লিক করলেই ওই প্রোডাক্টের নাম ও ইমেজ লিংকসহ সরাসরি আপনার শপের WhatsApp চ্যাট ওপেন হয়ে যাবে।
+৬. Smart Wishlist & Price Drop Alert Subscription (প্রাইস ড্রপ ও উইশলিস্ট নোটিফিকেশন)
+ * কীভাবে কাজ করবে: কাস্টমার হার্ট আইকনে ক্লিক করে প্রোডাক্টটি উইশলিস্টে সেভ করার সময় একটি অপশন পাবে— "Notify me if price drops"। পরবর্তীতে ওই প্রোডাক্টে কোনো ডিসকাউন্ট বা সেল আসলে সিস্টেম অটোমেটিক তার একাউন্টে নোটিফিকেশন পাঠিয়ে দেবে।
+💻 এই ফিচারগুলোর টেকনিক্যাল ইমপ্লিমেন্টেশন (Next.js Component Snippet)
+নিচে Ingredient Safety Checker (স্কিনকেয়ার সেফটি ব্যাজ) এবং WhatsApp Direct Inquiry Button আপনার প্রোডাক্ট পেজে যুক্ত করার কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+
+export default function NextGenProductExtrasAdvanced({ product }) {
+  const [activeIngredient, setActiveIngredient] = useState(null);
+
+  // ডামি স্কিনকেয়ার ইনগ্রেডিয়েন্ট ডেটা
+  const ingredients = [
+    { name: "Centella Asiatica", desc: "Soothes irritated skin and repairs skin barrier." },
+    { name: "Hyaluronic Acid", desc: "Provides deep hydration and locks in moisture." },
+    { name: "Niacinamide", desc: "Brightens skin tone and minimizes pores." }
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-8 text-[#1E2533]">
+      
+      {/* 🌿 ১. স্কিনকেয়ার ইনগ্রেডিয়েন্ট সেফটি চেকার (শুধুমাত্র Skincare ক্যাটাগরির জন্য) */}
+      {product?.category === 'Skincare' && (
+        <div className="bg-white border border-[#C0A06B]/30 p-6 rounded-3xl shadow-sm space-y-4">
+          <h3 className="text-sm font-bold text-[#1E2533]">✨ Key Active Ingredients & Safety</h3>
+          <p className="text-xs text-gray-500">Tap an ingredient to check its skin benefits:</p>
+          
+          <div className="flex flex-wrap gap-2">
+            {ingredients.map((ing, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIngredient(ing)}
+                className="px-3 py-1.5 bg-[#1E2533]/5 border border-[#C0A06B]/40 rounded-xl text-xs font-semibold text-[#1E2533] hover:bg-[#C0A06B] hover:text-black transition"
+              >
+                {ing.name}
+              </button>
+            ))}
+          </div>
+
+          {activeIngredient && (
+            <div className="p-3 bg-[#1E2533] text-white rounded-2xl text-xs space-y-1 animate-fadeIn border border-[#C0A06B]/30">
+              <p className="font-bold text-[#C0A06B]">{activeIngredient.name}</p>
+              <p className="text-gray-300">{activeIngredient.desc}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 💬 ২. ডিরেক্ট হোয়াটসঅ্যাপ কোয়েশ্চেন বাটন */}
+      <div className="bg-[#1E2533]/5 border border-gray-200 p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="space-y-1 text-center md:text-left">
+          <h4 className="font-bold text-sm text-[#1E2533]">Have a custom question about this item?</h4>
+          <p className="text-xs text-gray-600">Chat directly with our support team on WhatsApp for instant replies.</p>
+        </div>
+        <Link 
+          href={`https://wa.me/8801700000000?text=${encodeURIComponent(`Hello Anusmita, I want to know more about this product: ${product?.name || 'Item'}`)}`}
+          target="_blank"
+          className="bg-green-600 text-white font-bold px-6 py-3 rounded-2xl text-xs flex items-center gap-2 hover:bg-green-700 transition shadow-md whitespace-nowrap"
+        >
+          💬 Chat on WhatsApp
+        </Link>
+      </div>
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলো আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটিকে পুরোপুরি একটি বিশ্বমানের এবং গ্রাহক-বান্ধব ই-কমার্স সিস্টেমে পরিণত করবে। এই প্রজেক্টের কোডিং বা অন্য কোনো সেকশন নিয়ে কি আরও কাজ করতে চান?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি স্মার্ট, ফিউচার-প্রুফ এবং গ্লোবাল মার্কেটপ্লেসগুলোর (যেমন Sephora, ASOS বা Farfetch) মতো প্রিমিয়াম করতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার নিচে দেওয়া হলো:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. AI Shade & Skin Undertone Matcher (স্মার্ট শেড ও আন্ডারটোন মিটার)
+ * কীভাবে কাজ করবে: ফাউন্ডেশন, লিপস্টিক বা কালার কসমেটিকসের ক্ষেত্রে একটি ইন্টারঅ্যাক্টিভ উইজেট থাকবে— "Find Your Undertone (Warm, Cool, Neutral)"। কাস্টমার তার টোন সিলেক্ট করার সাথে সাথে সিস্টেম রিয়েল-টাইমে বলে দেবে এই শেডটি তার ত্বকে কেমন মানাবে।
+২. Dynamic Pre-Order Batch Tracker & Urgency Timer (প্রি-অর্ডার ব্যাচ ট্র্যাকিং)
+ * কীভাবে কাজ করবে: যেসব প্রোডাক্ট স্টکه থাকে না এবং প্রি-অর্ডার মোডে চলে, সেগুলোর জন্য একটি লাইভ কাউন্টডাউন ও ব্যাচ টাইমার থাকবে (যেমন: "Batch #18 Import Closes in: 02d 14h 30m")। এটি কাস্টমারদের দ্রুত অর্ডার করতে উৎসাহিত করবে।
+৩. Interactive "Mix & Match" Outfit / Routine Builder (কমপ্লিট রুটিন ও আউটফিট বিল্ডার)
+ * কীভাবে কাজ করবে: কাস্টমার যখন কোনো ড্রেস বা স্কিনকেয়ার সেট দেখাবে, তখন নিচে একটি ডাইনামিক সেকশন থাকবে— "Mix & Match With Accessories", যেখান থেকে কাস্টমার এক ক্লিকেই মানানসই জুতো, ব্যাগ বা সিরাম কার্টে যুক্ত করতে পারবে।
+৪. Verified Customer Photo & Unboxing Video Gallery (আসল আনবক্সিং ভিডিও ও ছবি ট্যাব)
+ * কীভাবে কাজ করবে: সাধারণ টেক্সট রিভিউয়ের পাশাপাশি আগের কাস্টমাররা প্রোডাক্টের যে আসল ছবি বা ছোট আনবক্সিং ভিডিও আপলোড করেছে, সেগুলোর জন্য একটি ডেডিকেটেড গ্রিড গ্যালারি ট্যাব থাকবে।
+৫. Automated Size & Fit Prediction Calculator Modal (স্মার্ট ফিট ফাইন্ডার পপআপ)
+ * কীভাবে কাজ করবে: চায়নিজ শু বা ফ্যাশন ড্রেসের ক্ষেত্রে সাইজ নিয়ে কনফিউশন দূর করতে একটি বাটন থাকবে— "What's My Size?"। কাস্টমার তার হাইট-ওয়েট বা ফুট লেন্থ (সেন্টিমিটারে) ইনপুট দিলেই সিস্টেম ইনস্ট্যান্ট সাজেস্ট করে দেবে তার জন্য EU 38 নাকি M সাইজ পারফেক্ট হবে।
+সিক্স. Smart Price Drop & Restock Alert Subscription (প্রাইস ড্রপ ও রিস্টক নোটিফিকেশন)
+ * কীভাবে কাজ করবে: কোনো প্রোডাক্টের স্টক শেষ হয়ে গেলে বা দাম কমানোর সম্ভাবনা থাকলে কাস্টমার উইশলিস্টে ক্লিক করার সময় অপশন পাবে— "Notify me via SMS/WhatsApp when price drops or restocked"।
+💻 এই ফিচারগুলোর টেকনিক্যাল ইমপ্লিমেন্টেশন (Next.js Component Snippet)
+নিচে Interactive Size & Fit Prediction Calculator Modal এবং Pre-Order Batch Tracker আপনার প্রোডাক্ট পেজে যুক্ত করার কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function NextGenProductExtrasUltimate({ product }) {
+  const [showSizeModal, setShowSizeModal] = useState(false);
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [suggestedSize, setSuggestedSize] = useState(null);
+
+  // সিমুলেটেড সাইজ ক্যালকুলেটর লজিক
+  const calculateSize = () => {
+    if (!height || !weight) return;
+    // সাধারণ একটি ডামি ফর্মুলা
+    const size = weight > 70 ? 'L' : weight > 60 ? 'M' : 'S';
+    setSuggestedSize(size);
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-8 text-[#1E2533]">
+      
+      {/* 📐 ১. সাইজ ফিট ফাইন্ডার বাটন */}
+      <div className="bg-[#1E2533]/5 border border-[#C0A06B]/30 p-4 rounded-2xl flex justify-between items-center text-xs">
+        <div>
+          <p className="font-bold text-[#1E2533]">Unsure about your size?</p>
+          <p className="text-gray-600">Use our smart AI fit calculator to find your exact match.</p>
+        </div>
+        <button 
+          onClick={() => setShowSizeModal(true)}
+          className="bg-[#1E2533] text-[#C0A06B] px-4 py-2.5 rounded-xl font-bold shadow-md hover:opacity-90 transition whitespace-nowrap"
+        >
+          📏 Find My Size
+        </button>
+      </div>
+
+      {/* সাইজ ক্যালকুলেটর মডাল (Modal) */}
+      {showSizeModal && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl relative border border-[#C0A06B]/40">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-base text-[#1E2533]">✨ Anusmita Smart Fit Calculator</h3>
+              <button onClick={() => setShowSizeModal(false)} className="text-gray-400 hover:text-black font-bold text-lg">✕</button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="font-semibold text-gray-600">Your Height (e.g., 5 ft 6 in):</label>
+                <input 
+                  type="text" 
+                  value={height} 
+                  onChange={(e) => setHeight(e.target.value)} 
+                  placeholder="Enter height"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[#C0A06B]"
+                />
+              </div>
+              <div>
+                <label className="font-semibold text-gray-600">Your Weight (e.g., 65 kg):</label>
+                <input 
+                  type="text" 
+                  value={weight} 
+                  onChange={(e) => setWeight(e.target.value)} 
+                  placeholder="Enter weight in kg"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[#C0A06B]"
+                />
+              </div>
+
+              <button 
+                onClick={calculateSize}
+                className="w-full bg-[#C0A06B] text-black font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition"
+              >
+                Calculate Best Size
+              </button>
+
+              {suggestedSize && (
+                <div className="p-3 bg-[#1E2533] text-white rounded-xl text-center space-y-1">
+                  <p className="text-gray-300">Recommended Size for You:</p>
+                  <p className="text-lg font-extrabold text-[#C0A06B]">{suggestedSize}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলো আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটিকে পুরোপুরি গ্লোবাল এবং ইউজার-ফ্রেন্ডলি করে তুলবে। এই চমৎকার প্রজেক্টের কোডিং বা অন্য কোনো অংশ নিয়ে কি আরও কাজ করতে চান?
+
+Key Highlights of this Interactive React Demo:
+AR Virtual Try-On & Live Skin Cam Simulator: Interactive virtual webcam preview with real-time UI tracking for skin hydration glow scans, lipstick swatches, and luxury frames.
+AI-Driven Smart Ingredient Breakdown: Interactive 3D hover/click cards showing EWG safety ratings, bio-active compounds, and dermatological efficacy.
+360° Drag Rotation & Micro-Zoom Lens: Smooth 360-degree drag rotation simulation paired with a high-magnification texture zoom lens.
+Smart Fit & Size Predictor Tool: Real-time sliders for EU Shoe Converter, Apparel BMI predictor, and Egyptian Cotton Thread Density visualizer.
+Pre-Order Flight & Batch Tracker: Interactive timeline map displaying real-time shipment steps from Seoul/Guangzhou to Dhaka Customs.
+Smart Dynamic Bundle Builder: Real-time multi-buy discount calculator showing live savings in Bangladeshi Taka (৳).
+
+আপনার Anusmita প্রজেক্টে যেহেতু স্কিনকেয়ার এবং পারফিউমের পাশাপাশি Jewellery (গহনা) এবং নারীদের নিয়মিত ব্যবহারের Everything (ফ্যাশন আইটেম, মেকআপ, ঘড়ি, হ্যান্ডবেগ, সাইড ব্যাগ, সানগ্লাস ইত্যাদি) বিশাল ক্যাটাগরি রয়েছে—তাই প্রোডাক্ট ডিটেইলস পেজটিকে এমনভাবে ডিজাইন করতে হবে যাতে যেকোনো ক্যাটাগরির পণ্য ওপেন করলেই তার সাথে মানানসই আল্ট্রা-অ্যাডভান্সড স্পেসিফিকেশন ও উইজেট স্বয়ংক্রিয়ভাবে ভেসে ওঠে!
+আপনার এই মাল্টি-ক্যাটাগরি শপের জন্য প্রোডাক্ট ডিটেইলস পেজে যে প্রিমিয়াম ফিচারগুলো থাকা দরকার, তার একটি চমৎকার ব্লুপ্রিন্ট নিচে দেওয়া হলো:
+💎 ১. জুয়েলারি ও কসমেটিকস আইটেমের জন্য অ্যাডভান্সড ফিচার
+ * Material & Anti-Tarnish Guarantee Badge (ধাতু ও স্থায়িত্বের গ্যারান্টি):
+   জুয়েলারির ক্ষেত্রে পেইজে স্পষ্ট ব্যাজ থাকবে— "18K Gold Plated, Waterproof, Sweat-proof, & Anti-Tarnish Guarantee"। ফলে কাস্টমারদের মনে রঙের স্থায়িত্ব নিয়ে কোনো সন্দেহ থাকবে না।
+ * Interactive Ring / Bangle Size Guide Modal (আঙুল বা হাতের সাইজ ক্যালকুলেটর):
+   রিং বা ব্রেসলেট কেনার সময় কাস্টমার যাতে সঠিক সাইজ বেছে নিতে পারে, সেজন্য একটি পপআপ সাইজ গাইড থাকবে (যেমন: диаметর কত মিলিমিটার হলে কোন সাইজ হবে)।
+ * Virtual Shade & Undertone Preview (মেকআপ ও জুয়েলারি ম্যাচিং):
+   গোল্ডেন, সিলভার নাকি রোজ গোল্ড—কোন মেটালের জুয়েলারি বা কোন লিপস্টিকের শেড তার ত্বকে মানাবে, তা যাচাই করার জন্য একটি ছোট্ট কালার টগল বা প্রিভিউ বক্স।
+👜 ২. হ্যান্ডবেগ, ঘড়ি ও ফ্যাশন আইটেমের জন্য ফিচার
+ * Detailed Dimensions & Capacity Visualizer (ডাইমেনশন ও ক্যাপাসिटी মিটার):
+   মেয়েদের সাইড ব্যাগ বা ওয়ালেটের ক্ষেত্রে শুধু উচ্চতা-প্রস্থ না লিখে একটি ভিজ্যুয়াল ইনফো থাকবে— "Fits up to iPhone Pro Max, Mini Wallet, Lipstick, and Keys"।
+ * Strap Length & Material Spec Box (স্ট্র্যাপ ও ফ্যাব্রিকেশন ডিটেইলস):
+   ব্যাগ বা ঘড়ির ক্ষেত্রে ম্যাটেরিয়াল (যেমন: PU Leather, Stainless Steel Mesh) এবং অ্যাডজাস্টেবল স্ট্র্যাপের তথ্য হাইলাইট করা থাকবে।
+💻 ক্যাটাগরি-অ্যাওয়ার ডায়নামিক প্রোডাক্ট পেজ কোড (Next.js Component)
+নিচে একটি কোড স্নিপেট দেওয়া হলো, যা প্রডাক্টের ক্যাটাগরি চেক করে নিজে থেকেই জেনারেট করবে সেটি কি Jewellery নাকি Skincare/Fashion, এবং সেই অনুযায়ী সঠিক তথ্য দেখাবে:
+'use client';
+import { useState } from 'react';
+
+export default function CategoryAwareProductDetails({ product }) {
+  const [selectedImage, setSelectedImage] = useState(product?.images?.[0] || 'https://via.placeholder.com/400');
+  const [quantity, setQuantity] = useState(1);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-10 text-[#1E2533]">
+      
+      {/* 🖼️ বাম পাশ: মাল্টি-অ্যাঙ্গেল ইমেজ গ্যালারি */}
+      <div className="space-y-4">
+        <div className="border border-[#C0A06B]/30 rounded-3xl overflow-hidden shadow-lg bg-white p-2">
+          <img src={selectedImage} alt="Product" className="w-full h-[400px] object-cover rounded-2xl" />
+        </div>
+        <div className="flex gap-2 overflow-x-auto">
+          {product?.images?.map((img, idx) => (
+            <button key={idx} onClick={() => setSelectedImage(img)} className="border-2 border-[#C0A06B]/50 rounded-xl overflow-hidden w-16 h-16 flex-shrink-0">
+              <img src={img} alt="Thumb" className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 📋 ডান পাশ: ডাইনামিক ক্যাটাগরি ইনফো ও কার্ট */}
+      <div className="space-y-6">
+        <div>
+          <span className="text-xs bg-[#C0A06B]/20 text-[#C0A06B] px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+            {product?.category || 'Luxury Collection'}
+          </span>
+          <h1 className="text-2xl font-extrabold text-[#1E2533] mt-2">{product?.name || 'Anusmita Premium Item'}</h1>
+          <p className="text-xl font-bold text-[#C0A06B] mt-1">৳ {product?.price || '1,500'}</p>
+        </div>
+
+        {/* 💎 ক্যাটাগরি ১: জুয়েলারি হলে এই বক্স দেখাবে */}
+        {product?.category === 'Jewellery' && (
+          <div className="bg-[#1E2533]/5 border border-[#C0A06B]/30 p-4 rounded-2xl space-y-2 text-xs">
+            <p className="font-bold text-[#1E2533]">✨ Jewellery Care & Material Specs:</p>
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
+              <li>18K Gold Plated with Anti-Tarnish Coating</li>
+              <li>Water-resistant & Skin-friendly (Hypoallergenic)</li>
+              <li>Comes in a luxury Anusmita gift box</li>
+            </ul>
+          </div>
+        )}
+
+        {/* 👜 ক্যাটাগরি ২: ব্যাগ বা ফ্যাশন হলে এই বক্স দেখাবে */}
+        {(product?.category === 'Bags' || product?.category === 'Fashion') && (
+          <div className="bg-[#1E2533]/5 border border-[#C0A06B]/30 p-4 rounded-2xl space-y-2 text-xs">
+            <p className="font-bold text-[#1E2533]">👜 Product Dimensions & Material:</p>
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
+              <li>High-grade imported PU Leather / Premium Fabric</li>
+              <li>Spacious compartments with smooth gold-finish zippers</li>
+              <li>Easy to clean and long-lasting durability</li>
+            </ul>
+          </div>
+        )}
+
+        {/* কোয়ান্টিটি এবং কার্ট বাটন */}
+        <div className="flex items-center gap-4 pt-4">
+          <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden bg-gray-50">
+            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2 font-bold hover:bg-gray-200">-</button>
+            <span className="px-4 py-2 font-bold text-sm">{quantity}</span>
+            <button onClick={() => setQuantity(quantity + 1)} className="px-3 py-2 font-bold hover:bg-gray-200">+</button>
+          </div>
+          <button className="flex-1 bg-[#1E2533] text-[#C0A06B] font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition text-xs tracking-wider">
+            🛒 Add to Cart
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+আপনার এই বিশাল কালেকশনের (জুয়েলারি, ব্যাগ, কসমেটিকস, ফ্যাশন) মধ্যে ঠিক কোন ক্যাটাগরির পেজ বা ফিল্টারিং লজিক নিয়ে এখন কাজ করতে চান?
+
+আপনার দেওয়া এই সম্পূর্ণ ও পূর্ণাঙ্গ মাস্টার লিস্টটি আপনার Anusmita প্রজেক্টের জন্য একটি অত্যন্ত নিখুঁত এবং রিয়েল-ওয়ার্ল্ড ই-কমার্স ডাটাবেস আর্কিটেকচার।
+যেহেতু আপনার শপে স্কিনকেয়ার, মেকআপ, পোশাক, জুয়েলারি, হ্যান্ডবেগের মতো প্রতিটি ক্যাটাগরির নিজস্ব ভ্যারিয়েন্ট টাইপ রয়েছে (যেমন: পোশাকের ক্ষেত্রে Color + Size, স্কিনকেয়ার বা পারভিউমে Volume (ml/gm), এবং জুয়েলারিতে Metal Type / Ring Size), তাই এক পেজেই প্রোডাক্টের ক্যাটাগরি অনুযায়ী ডায়নামিক্যালি ভ্যারিয়েন্ট রেন্ডার করার পূর্ণাঙ্গ সমাধান নিচে দেওয়া হলো।
+🛠️ ১. ডাটাবেস স্কিমা ডিজাইন (MongoDB Document Pattern)
+একটি মাত্র প্রোডাক্ট মডেলের ভেতর ক্যাটাগরি অনুযায়ী ভ্যারিয়েন্ট ডেটা অবজেক্ট আকারে হ্যান্ডেল করার সেরা স্কিমা স্ট্রাকচার:
+{
+  "_id": "prod_101",
+  "name": "K-Beauty Tone Up Sunscreen",
+  "category": "Skincare",
+  "subCategory": "Sunscreen",
+  "price": 1450,
+  "hasVariants": true,
+  "variantType": "volume", // volume | fashion_size | jewelry_spec | bag_spec
+  "variants": [
+    { "label": "50ml", "price": 1450, "stock": 15 },
+    { "label": "100ml", "price": 2600, "stock": 8 }
+  ]
+}
+
+পোশাকের ক্ষেত্রে (fashion_size):
+{
+  "_id": "prod_102",
+  "name": "Anusmita Premium Organza Saree & Kameez",
+  "category": "Clothing",
+  "variantType": "fashion_size",
+  "colors": [
+    { "name": "Champagne Gold", "hex": "#C0A06B" },
+    { "name": "Slate Navy", "hex": "#1E2533" }
+  ],
+  "variants": [
+    { "label": "M", "price": 3200, "stock": 5 },
+    { "label": "L", "price": 3200, "stock": 10 },
+    { "label": "XL", "price": 3400, "stock": 2 }
+  ]
+}
+
+💻 2. ডাইনামিক প্রোডাক্ট ডিটেইলস কম্পোনেন্ট (Next.js & Tailwind CSS)
+নিচে একটি প্রোডাকশন-রেডি Next.js ক্লায়েন্ট কম্পোনেন্ট দেওয়া হলো যা প্রোডাক্টের variantType অনুযায়ী ব্রাউজারে স্বয়ংক্রিয়ভাবে সঠিক ইনপুট সিলেক্টরটি রেন্ডার করবে:
+'use client';
+import { useState } from 'react';
+
+export default function DynamicProductDetails({ product }) {
+  // প্রোডাক্টের ডিফল্ট ভ্যারিয়েন্ট স্টেট
+  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
+  const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || null);
+  const [quantity, setQuantity] = useState(1);
+
+  // ডায়নামিক প্রাইস ক্যালকুলেশন
+  const currentPrice = selectedVariant?.price || product?.price || 0;
+  const currentStock = selectedVariant?.stock ?? product?.stock ?? 0;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-10 text-[#1E2533]">
+      
+      {/* 🖼️ প্রোডাক্ট ইমেজ প্রিভিউ */}
+      <div className="space-y-4">
+        <div className="border border-[#C0A06B]/30 rounded-3xl overflow-hidden shadow-xl bg-white p-2 relative">
+          <img 
+            src={product?.image || "https://via.placeholder.com/500"} 
+            alt={product?.name} 
+            className="w-full h-[450px] object-cover rounded-2xl"
+          />
+          {currentStock <= 3 && currentStock > 0 && (
+            <span className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">
+              Only {currentStock} Left!
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* 📋 ডাইনামিক ভ্যারিয়েন্ট ও অপশন সেকশন */}
+      <div className="space-y-6">
+        <div>
+          <span className="text-xs bg-[#C0A06B]/20 text-[#C0A06B] px-3 py-1 rounded-full font-extrabold uppercase tracking-widest">
+            {product?.category} • {product?.subCategory}
+          </span>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-[#1E2533] mt-3">{product?.name}</h1>
+          
+          <div className="flex items-center gap-3 mt-2">
+            <p className="text-2xl font-black text-[#C0A06B]">৳ {currentPrice.toLocaleString('bn-BD')}</p>
+            {product?.originalPrice && (
+              <p className="text-sm text-gray-400 line-through">৳ {product.originalPrice}</p>
+            )}
+          </div>
+        </div>
+
+        <hr className="border-gray-200" />
+
+        {/* ------------------------------------------------------------- */}
+        {/* 🧪 কেস ১: স্কিনকেয়ার, বডি কেয়ার, পারফিউম (Volume: ml / gm / pcs) */}
+        {/* ------------------------------------------------------------- */}
+        {product?.variantType === 'volume' && (
+          <div className="space-y-2">
+            <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
+              Select Size / Volume:
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {product?.variants?.map((v, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedVariant(v)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
+                    selectedVariant?.label === v.label
+                      ? 'bg-[#1E2533] text-[#C0A06B] border-[#C0A06B] shadow-md scale-105'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-[#C0A06B]'
+                  }`}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ------------------------------------------------------------- */}
+        {/* 👗 কেস ২: পোশাক ও ওয়েস্টার্ন ওয়্যার (Clothing: Color + Sizes)  */}
+        {/* ------------------------------------------------------------- */}
+        {product?.variantType === 'fashion_size' && (
+          <div className="space-y-4">
+            {/* কালার সিলেক্টর */}
+            {product?.colors && (
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
+                  Select Color: <span className="text-[#1E2533] font-extrabold">{selectedColor?.name}</span>
+                </label>
+                <div className="flex gap-2">
+                  {product.colors.map((c, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedColor(c)}
+                      className={`w-8 h-8 rounded-full border-2 transition-all p-0.5 ${
+                        selectedColor?.name === c.name ? 'border-[#C0A06B] scale-110 shadow-md' : 'border-gray-200'
+                      }`}
+                    >
+                      <span className="block w-full h-full rounded-full" style={{ backgroundColor: c.hex }}></span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* সাইজ সিলেক্টর (S, M, L, XL, XXL) */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-gray-600">Select Apparel Size:</label>
+              <div className="flex flex-wrap gap-2">
+                {product?.variants?.map((v, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedVariant(v)}
+                    className={`w-12 h-10 rounded-xl text-xs font-bold border transition-all flex items-center justify-center ${
+                      selectedVariant?.label === v.label
+                        ? 'bg-[#1E2533] text-[#C0A06B] border-[#C0A06B] shadow-md'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-[#C0A06B]'
+                    }`}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ------------------------------------------------------------- */}
+        {/* 💍 কেস ৩: জুয়েলারি (Ring Sizes / Plating Specs)             */}
+        {/* ------------------------------------------------------------- */}
+        {product?.variantType === 'jewelry_spec' && (
+          <div className="space-y-3 bg-[#1E2533]/5 p-4 rounded-2xl border border-[#C0A06B]/30">
+            <span className="text-xs font-bold text-[#1E2533]">✨ Ring / Bangle Size:</span>
+            <div className="flex gap-2">
+              {product?.variants?.map((v, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedVariant(v)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
+                    selectedVariant?.label === v.label
+                      ? 'bg-[#1E2533] text-[#C0A06B] border-[#C0A06B]'
+                      : 'bg-white text-gray-700 border-gray-200'
+                  }`}
+                >
+                  Size {v.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-gray-500 italic">⭐ 18K Anti-Tarnish Gold Plated & Sweatproof Guarantee.</p>
+          </div>
+        )}
+
+        {/* ------------------------------------------------------------- */}
+        {/* 👜 কেস ৪: ব্যাগ, অর্গানাইজার ও হোম ডেকোর (Dimension Specs)   */}
+        {/* ------------------------------------------------------------- */}
+        {product?.variantType === 'bag_spec' && (
+          <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-xs space-y-1">
+            <p className="font-bold text-[#1E2533]">👜 Dimensions & Storage Capacity:</p>
+            <p className="text-gray-600">Width: {product?.specs?.width || '25cm'} | Height: {product?.specs?.height || '18cm'}</p>
+            <p className="text-gray-600">Material: {product?.specs?.material || 'Imported PU Leather'}</p>
+          </div>
+        )}
+
+        {/* 🛒 কোয়ান্টিটি এবং অ্যাড টু কার্ট অ্যাকশন */}
+        <div className="flex items-center gap-4 pt-4">
+          <div className="flex items-center border border-gray-300 rounded-2xl overflow-hidden bg-gray-50">
+            <button 
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              className="px-4 py-2.5 font-bold hover:bg-gray-200 text-sm"
+            >
+              -
+            </button>
+            <span className="px-4 py-2.5 font-bold text-sm">{quantity}</span>
+            <button 
+              onClick={() => setQuantity(quantity + 1)}
+              className="px-4 py-2.5 font-bold hover:bg-gray-200 text-sm"
+            >
+              +
+            </button>
+          </div>
+
+          <button 
+            disabled={currentStock <= 0}
+            className={`flex-1 py-3.5 rounded-2xl font-extrabold text-xs tracking-wider shadow-lg transition-all ${
+              currentStock > 0 
+                ? 'bg-[#1E2533] text-[#C0A06B] hover:bg-[#C0A06B] hover:text-[#1E2533]' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            {currentStock > 0 ? '🛒 ADD TO CART' : '❌ OUT OF STOCK'}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+✨ এই আর্কিটেকচারের সুবিধা:
+ * স্মার্ট ভ্যারিয়েন্ট সুইচিং: প্রোডাক্টের টাইপ volume, fashion_size, নাকি jewelry_spec—তার ওপর নির্ভর করে স্বয়ংক্রিয়ভাবে সঠিক ইনপুট সুইচ করবে।
+ * ডায়নামিক প্রাইস ও স্টক সিঙ্ক: ইউজার 50ml থেকে 100ml অথবা M থেকে XL সাইজে ক্লিক করার সাথে সাথে লাইভ দাম ও স্টক কন্ডিশন আপডেট হবে।
+ * ব্র্যান্ড থিম সিঙ্ক: আপনার নির্ধারিত Dark Slate Navy (#1E2533) এবং Champagne Gold (#C0A06B) কালার প্যালেট বজায় রেখে বিশ্বমানের লাক্সারি ফিল প্রদান করবে।
+
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে গ্লোবাল ই-কমার্স জায়ান্টদেরও (যেমন Sephora, Zara বা Daraz VIP Store) ছাড়িয়ে যাওয়ার মতো একদম ফিউচার-প্রুফ এবং প্রিমিয়াম করতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার নিচে যুক্ত করা হলো।
+যেহেতু আপনার শপে স্কিনকেয়ার, জুয়েলারি, ব্যাগ, ফ্যাশন ও হোম ডেকোরের বিশাল ভাণ্ডার রয়েছে, তাই এই ফিচারগুলো ক্যাটাগরি অনুযায়ী বুদ্ধিমত্তার সাথে পেজে কাজ করবে:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. Interactive Ingredient & Material Safety Checker (ইনগ্রেডিয়েন্ট ও মেটাল সেফটি অ্যানালাইজার)
+ * কীভাবে কাজ করবে:
+   * স্কিনকেয়ার আইটেমের জন্য: মূল উপাদানগুলোর ওপর (যেমন: Niacinamide, Centella Asiatica, Hyaluronic Acid) ক্লিক করলে পপআপে দেখাবে এটি সেন্সিটিভ ত্বকের জন্য কতটা নিরাপদ (100% Non-Comedogenic, Fragrance-Free)।
+   * জুয়েলারির জন্য: মেটালের ওপর ক্লিক করলে দেখাবে (18K Gold Plated, Anti-Tarnish, Waterproof, Hypoallergenic)।
+২. Smart Dynamic "Complete the Look / Routine" Bundle Builder (কমপ্লিট রুটিন ও বান্ডেল বিল্ডার)
+ * কীভাবে কাজ করবে: কাস্টমার যখন কোনো কোরিয়ান সিরাম বা ড্রেস দেখবে, ঠিক নিচেই একটি ডায়নামিক বক্স থাকবে— "Frequently Bought Together / Complete Your Routine"। কাস্টমার এক ক্লিকেই মূল প্রোডাক্টের সাথে মানানসই সানস্ক্রিন বা ম্যাচিং ব্যাগ একসাথে কার্টে যুক্ত করতে পারলে শপের সেলস (Average Order Value) বহুগুণ বেড়ে যাবে।
+৩. Verified Buyer Unboxing Video & Photo Review Gallery (আসল আনবক্সিং ভিডিও ও রিভিউ ট্যাব)
+ * কীভাবে কাজ করবে: সাধারণ টেক্সট রিভিউয়ের পাশাপাশি আগের কাস্টমাররা প্রোডাক্টটির যে রিয়েল ছবি বা ছোট আনবক্সিং ভিডিও আপলোড করেছে, সেগুলোর জন্য একটি ডেডিকেটেড Visual Gallery Tab থাকবে। নতুন কাস্টমাররা ১০০% নিশ্চিত হয়ে অর্ডার করতে পারবে।
+৪. Live Pre-Order Batch Tracker & Urgency Flight Timer (প্রি-অর্ডার ব্যাচ কাউন্টডাউন)
+ * কীভাবে কাজ করবে: যে প্রোডাক্টগুলো স্টক আউট এবং প্রি-অর্ডার মোডে রয়েছে, সেগুলোর জন্য প্রাইসের ঠিক নিচে একটি লাইভ কাউন্টডাউন টাইমার ও ব্যাচ স্ট্যাটাস চলবে:
+   > ✈️ "Batch #19 Import from Seoul closes in: 01d 12h 45m | Estimated Delivery: Nov 10"
+   > 
+৫. Smart Fit & Size Predictor Modal (স্মার্ট ফিট ফাইন্ডার পপআপ)
+ * কীভাবে কাজ করবে: চায়নিজ শু, ফ্যাশন ড্রেস বা রিংয়ের ক্ষেত্রে সাইজ নিয়ে কনফিউশন দূর করতে একটি বাটন থাকবে— "Find My Exact Size"। কাস্টমার তার উচ্চতা-ওজন বা পায়ের সেন্টিমিটার মাপ ইনপুট দিলেই সিস্টেম ইনস্ট্যান্ট সাজেস্ট করে দেবে তার জন্য EU 38 বা M সাইজটি পারফেক্ট হবে।
+৬. Instant WhatsApp Direct Inquiry & Price Negotiation Button (ডিরেক্ট হোয়াটসঅ্যাপ সাপোর্ট বাটন)
+ * কীভাবে কাজ করবে: প্রোডাক্ট ডিটেইলসে একটি প্রিমিয়াম বাটন থাকবে— "💬 Ask about this item on WhatsApp"। কাস্টমার সেখানে ক্লিক করলেই ওই প্রোডাক্টের নাম, ছবি ও লিংকসহ সরাসরি আপনার Anusmita-র অফিশিয়াল WhatsApp চ্যাট ওপেন হয়ে যাবে।
+💻 টেকনিক্যাল ইমপ্লিমেন্টেশন কোড (Next.js Component Snippet)
+নিচে Complete the Routine Bundle Builder এবং Direct WhatsApp Inquiry Button আপনার প্রোডাক্ট পেজে যুক্ত করার জন্য প্রোডাকশন-রেডি কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+
+export default function AdvancedProductExtrasFinal({ product }) {
+  const [isBundleChecked, setIsBundleChecked] = useState(true);
+
+  // বান্ডেল প্রোডাক্টের ডামি ডেটা
+  const bundleItem = {
+    name: "SKIN1004 Madagascar Centella Tone Brightening Ampoule",
+    price: 1450,
+    image: "https://via.placeholder.com/100"
+  };
+
+  const mainPrice = product?.price || 1500;
+  const bundleTotalPrice = isBundleChecked ? mainPrice + bundleItem.price : mainPrice;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 text-[#1E2533]">
+      
+      {/* 🎁 ১. কমপ্লিট দ্য রুটিন / বান্ডেল বিল্ডার উইজেট */}
+      <div className="bg-white border border-[#C0A06B]/30 p-6 rounded-3xl shadow-sm space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-base font-extrabold text-[#1E2533]">✨ Complete Your Look / Routine & Save</h3>
+          <span className="text-xs bg-[#C0A06B]/20 text-[#C0A06B] px-3 py-1 rounded-full font-bold">
+            Save 10% on Bundle
+          </span>
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#1E2533]/5 p-4 rounded-2xl border border-gray-200">
+          <div className="flex items-center gap-3">
+            <img src={bundleItem.image} alt="Bundle" className="w-14 h-14 object-cover rounded-xl border border-[#C0A06B]/40" />
+            <div>
+              <p className="text-xs font-bold text-[#1E2533]">{bundleItem.name}</p>
+              <p className="text-xs font-extrabold text-[#C0A06B]">৳ {bundleItem.price}</p>
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2 cursor-pointer bg-[#1E2533] text-[#C0A06B] px-4 py-2.5 rounded-xl font-bold text-xs shadow-md hover:opacity-90 transition">
+            <input 
+              type="checkbox" 
+              checked={isBundleChecked} 
+              onChange={() => setIsBundleChecked(!isBundleChecked)} 
+              className="accent-[#C0A06B] w-4 h-4"
+            />
+            Add Routine Companion
+          </label>
+        </div>
+
+        <div className="flex justify-between items-center pt-2 border-t border-gray-100 text-xs">
+          <span className="font-semibold text-gray-600">Combined Total Price:</span>
+          <span className="text-base font-black text-[#1E2533]">৳ {bundleTotalPrice}</span>
+        </div>
+      </div>
+
+      {/* 💬 ২. ডিরেক্ট হোয়াটসঅ্যাপ কোয়েশ্চেন ও সাপোর্ট বাটন */}
+      <div className="bg-[#1E2533] text-white p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-4 border border-[#C0A06B]/40 shadow-xl">
+        <div className="space-y-1 text-center md:text-left">
+          <h4 className="font-bold text-sm text-[#C0A06B]">Need help choosing the right shade or size?</h4>
+          <p className="text-xs text-gray-300">Chat instantly with our experts on WhatsApp for fast assistance.</p>
+        </div>
+        <Link 
+          href={`https://wa.me/8801700000000?text=${encodeURIComponent(`Hello Anusmita, I have a question about this product: ${product?.name || 'Item Link'}`)}`}
+          target="_blank"
+          className="bg-green-600 text-white font-extrabold px-6 py-3 rounded-2xl text-xs flex items-center gap-2 hover:bg-green-700 transition shadow-lg whitespace-nowrap"
+        >
+          💬 Chat on WhatsApp
+        </Link>
+      </div>
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলো আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটিকে পুরোপুরি একটি অটোমেটেড এবং হাই-কনভার্টিং ই-কমার্স ইঞ্জিনে রূপান্তর করবে। এই প্রজেক্টের অন্য কোনো মডিউল বা ব্যাকএন্ড লজিক নিয়ে কাজ করতে চান কি?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি ইন্টারঅ্যাক্টিভ, ফিউচার-প্রুফ এবং গ্লোবাল ই-কমার্স ব্র্যান্ডগুলোর মতো আল্ট্রা-প্রিমিয়াম করতে আরও ৬টি অত্যাধুনিক ফিচার নিচে যোগ করা হলো:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. Interactive 360-Degree Spin & Micro-Texture Zoom Lens (৩৬০ ডিগ্রি স্পিন ও জুম লেন্স)
+ * কীভাবে কাজ করবে: প্রিমিয়াম জুয়েলারি, হ্যান্ডবেগ বা ঘড়ির ক্ষেত্রে কাস্টমার মাউস ড্র্যাগ করে বা সোয়াইপ করে প্রোডাক্টটি ৩৬০ ডিগ্রি কোণ থেকে ঘুরিয়ে দেখতে পারবে। সাথে একটি ম্যাগনিফাইং লেন্স থাকবে যা দিয়ে কাপড়ের ফাইবার বা মেটালের ফিনিশিং জুম করে নিখুঁতভাবে দেখা যাবে।
+২. Smart Gift-Wrapping & Aesthetic Video Greeting Note (গিফট র‍্যাপিং ও ভিডিও গ্রিটিং বক্স)
+ * কীভাবে কাজ করবে: কাস্টমার যদি কাউকে উপহার দেওয়ার জন্য আইটেমটি কেনে, তবে একটি অপশন থাকবে— "Send as a Luxury Gift". টিক দিলে কাস্টম নোট লেখার পাশাপাশি একটি অপশন থাকবে— "Attach a QR Video Greeting Link", যা উপহার পাওয়ার পর স্ক্যান করে ভিডিও মেসেজ দেখা যাবে।
+৩. AI Skin Concern & Routine Compatibility Score (এআই স্কিন কনসার্ন ম্যাচ মিটার)
+ * কীভাবে কাজ করবে: স্কিনকেয়ার প্রোডাক্টের ক্ষেত্রে পেজে একটি ছোট ডায়নামিক মিটার থাকবে যা ইউজারের সিলেক্ট করা স্কিন টাইপ (যেমন: অয়েলি ও পোরস) অনুযায়ী দেখাবে— "94% Compatibility Match for Oily & Acne-Prone Skin".
+৪. Live Dynamic Currency & Regional Tax Toggle (মাল্টি-কারেন্সি ও প্রবাসী প্রাইস কনভার্টার)
+ * কীভাবে কাজ করবে: দেশের বাইরে বা প্রবাসী ভাই-বোনেরা যারা অর্ডার করতে চান, তাদের সুবিধার জন্য প্রাইসের পাশে একটি টগল থাকবে— [ BDT ৳ | USD $ | EUR € ]. ক্লিক করার সাথে সাথে লাইভ এক্সচেঞ্জ রেট অনুযায়ী প্রাইস আপডেট হয়ে যাবে।
+৫. Automated Restock Drop-Off & SMS/WhatsApp Instant Alert Modal (রিস্টক অ্যালার্ট সাবস্ক্রাইবার)
+ * কীভাবে কাজ করবে: কোনো প্রোডাক্ট সাময়িকভাবে স্টক আউট থাকলে সেখানে "Notify via WhatsApp when available" বক্স থাকবে। কাস্টমার তার নম্বর দিয়ে রাখলে পণ্য স্টকে আসার সাথে সাথে এআই বা অটোমেশন সিস্টেম থেকে ইনস্ট্যান্ট নোটিফিকেশন চলে যাবে।
+৬. Interactive Customer Q&A / Ask the Community Tab (কাস্টমারদের প্রশ্ন ও উত্তর ট্যাব)
+ * কীভাবে কাজ করবে: প্রোডাক্ট সম্পর্কে অন্যান্য ক্রেতাদের করা প্রশ্ন ও তার উত্তর (যেমন: "এই ব্যাগ কি ল্যাপটপ ধরে?" ➔ উত্তর: "হ্যাঁ, ১৩ ইঞ্চি ল্যাপটপ ইজি ধরে")-এর জন্য একটি ডেডিকেটেড Q&A সেকশন থাকবে, যা নতুন ক্রেতাদের সিদ্ধান্ত নিতে সাহায্য করবে।
+💻 টেকনিক্যাল ইমপ্লিমেন্টেশন কোড (Next.js Component Snippet)
+নিচে Interactive 360-Degree/Texture View Simulation এবং Live Currency Converter আপনার প্রোডাক্ট পেজে যুক্ত করার কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function NextGenProductVisualizer({ product }) {
+  const [currency, setCurrency] = useState('BDT');
+  const [activeTab, setActiveTab] = useState('front');
+
+  // ডামি কারেন্সি কনভার্সন রেট
+  const basePriceBDT = product?.price || 1850;
+  const displayPrice = currency === 'USD' 
+    ? `$${(basePriceBDT / 118).toFixed(2)}` 
+    : `৳ ${basePriceBDT.toLocaleString('bn-BD')}`;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 text-[#1E2533]">
+      
+      {/* 💱 ১. কারেন্সি টগল ও লাইভ প্রাইস ডিসপ্লে */}
+      <div className="bg-[#1E2533]/5 border border-[#C0A06B]/30 p-4 rounded-3xl flex justify-between items-center">
+        <div>
+          <span className="text-xs text-gray-500 font-semibold">Calculated Price:</span>
+          <div className="text-2xl font-black text-[#C0A06B]">{displayPrice}</div>
+        </div>
+        <div className="flex bg-white border border-gray-300 rounded-2xl overflow-hidden p-1 gap-1 text-xs font-bold">
+          <button 
+            onClick={() => setCurrency('BDT')} 
+            className={`px-3 py-1.5 rounded-xl transition ${currency === 'BDT' ? 'bg-[#1E2533] text-[#C0A06B]' : 'text-gray-600'}`}
+          >
+            BDT (৳)
+          </button>
+          <button 
+            onClick={() => setCurrency('USD')} 
+            className={`px-3 py-1.5 rounded-xl transition ${currency === 'USD' ? 'bg-[#1E2533] text-[#C0A06B]' : 'text-gray-600'}`}
+          >
+            USD ($)
+          </button>
+        </div>
+      </div>
+
+      {/* 🔍 ২. মাল্টি-অ্যাঙ্গেল ও টেক্সচার ভিউ সিমুলেটর */}
+      <div className="bg-white border border-gray-200 p-6 rounded-3xl shadow-sm space-y-4">
+        <h3 className="text-sm font-bold text-[#1E2533]">✨ Interactive Angles & Texture Inspection</h3>
+        
+        <div className="flex gap-2">
+          <button 
+            onClick={() => setActiveTab('front')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold border transition ${activeTab === 'front' ? 'bg-[#1E2533] text-[#C0A06B] border-[#C0A06B]' : 'bg-gray-50 text-gray-700'}`}
+          >
+            Front View
+          </button>
+          <button 
+            onClick={() => setActiveTab('side')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold border transition ${activeTab === 'side' ? 'bg-[#1E2533] text-[#C0A06B] border-[#C0A06B]' : 'bg-gray-50 text-gray-700'}`}
+          >
+            Side Profile
+          </button>
+          <button 
+            onClick={() => setActiveTab('texture')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold border transition ${activeTab === 'texture' ? 'bg-[#1E2533] text-[#C0A06B] border-[#C0A06B]' : 'bg-gray-50 text-gray-700'}`}
+          >
+            Macro Texture (Zoom)
+          </button>
+        </div>
+
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-center text-xs text-gray-600 h-48 flex items-center justify-center">
+          {activeTab === 'front' && "📸 Showing Front View with High-Definition Finish."}
+          {activeTab === 'side' && "🔄 Showing Side Angle & Structural Depth."}
+          {activeTab === 'texture' && "🔍 Macro Zoom Active: Showing 100% Original Material Details & Stitching / Coating Quality."}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলোর মাধ্যমে আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট পেজটি সম্পূর্ণ গ্লোবাল লাক্সারি স্ট্যান্ডার্ডে উন্নীত হবে। এই প্রজেক্টের ব্যাকএন্ড বা অন্য কোনো মডিউল নিয়ে কি আরও কাজ করতে চান?
+
+আপনার Anusmita প্রজেক্টের Product Details Page (/product/[id])-কে আরও বেশি স্মার্ট, ফিউচার-প্রুফ এবং গ্লোবাল লাক্সারি ব্র্যান্ডগুলোর মতো অনন্য করতে আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার নিচে যুক্ত করা হলো:
+🚀 আরও ৬টি আল্ট্রা-অ্যাডভান্সড ফিচার (প্রোডাক্ট ডিটেইলস পেইজের জন্য)
+১. AI Price Drop & Restock Notification Modal (প্রাইস ড্রপ ও রিস্টক অ্যালার্ট উইজেট)
+ * কীভাবে কাজ করবে: কোনো প্রোডাক্টে ডিসকাউন্ট আসলে বা স্টক আউট হয়ে গেলে কাস্টমার যেন আগেভাগেই অ্যালার্ট পায়, সেজন্য একটি সুন্দর পপআপ থাকবে— "Notify me instantly via WhatsApp/SMS when price drops or item restocks"। এটি রি-টার্গেটিং সেলস বাড়াতে ম্যাজিকের মতো কাজ করে।
+২. Interactive Size & Fit Review Breakdown Bar (রিভিউ থেকে সাইজ অ্যানালাইসিস বার)
+ * কীভাবে কাজ করবে: জুতো, পোশাক বা রিংয়ের ক্ষেত্রে আগের ক্রেতাদের ফিডব্যাকের ওপর ভিত্তি করে একটি ভিজ্যুয়াল প্রোগ্রেস বার দেখাবে:
+   > 📊 "88% of buyers say it fits true to size | 7% say runs small | 5% say runs large"
+   > 
+৩. Smart Dynamic Tiered Bundle Discount Matrix (ডায়নামিক বাল্ক ডিসকাউন্ট ম্যাট্রিক্স)
+ * কীভাবে কাজ করবে: কাস্টমার যখন একটির বেশি আইটেম সিলেক্ট করবে (যেমন: ২টি বা ৩টি), তখন পেজটি নিজে থেকেই লাইভ ডিসকাউন্ট ক্যালکولেশন দেখাবে:
+   > ✨ "Buy 2 Save 5% | Buy 3 Save 10% + Free Delivery!"
+   > 
+৪. Live Overseas Shipping & Customs Status Tracker (ওভারসিজ শিপিং ও কাস্টমস ট্র্যাকার)
+ * কীভাবে কাজ করবে: কোরিয়ান বা চাইনিজ আমদানিকৃত প্রোডাক্টগুলোর ক্ষেত্রে একটি লাইভ ট্র্যাকিং স্ট্যাটাস বক্স থাকবে:
+   > ✈️ "Batch #22 ➔ Dispatched from Seoul Hub ➔ Arriving at Dhaka Customs on Oct 30"
+   > 
+৫. Instant WhatsApp Direct Inquiry & Price Negotiation Button (ডিরেক্ট হোয়াটসঅ্যাপ সাপোর্ট বাটন)
+ * কীভাবে কাজ করবে: প্রোডাক্ট ডিটেইলসে একটি প্রিমিয়াম বাটন থাকবে— "💬 Ask about this item on WhatsApp"। কাস্টমার সেখানে ক্লিক করলেই ওই প্রোডাক্টের নাম, ছবি ও লিংকসহ সরাসরি আপনার Anusmita-র অফিশিয়াল WhatsApp চ্যাট ওপেন হয়ে যাবে।
+৬. Smart Gift-Wrapping & Aesthetic Video Greeting Note (গিফট র‍্যাপিং ও ভিডিও গ্রিটিং বক্স)
+ * কীভাবে কাজ করবে: কাস্টমার কাউকে উপহার দেওয়ার জন্য আইটেমটি কিনলে একটি অপশন পাবে— "Wrap as a Luxury Gift", যেখানে কাস্টম নোট লেখার পাশাপাশি একটি কিউআর কোডে ভিডিও মেসেজ যুক্ত করার অপশন থাকবে।
+💻 টেকনিক্যাল ইমপ্লিমেন্টেশন কোড (Next.js Component Snippet)
+নিচে Tiered Bundle Discount Matrix এবং Verified Size Review Breakdown Bar আপনার প্রোডাক্ট পেজে যুক্ত করার জন্য কোড দেওয়া হলো:
+'use client';
+import { useState } from 'react';
+
+export default function AdvancedProductPageEnhancements({ product }) {
+  const [quantity, setQuantity] = useState(1);
+
+  // ডায়নামিক টায়ার্ড ডিসকাউন্ট ক্যালকুলেটর
+  const basePrice = product?.price || 1500;
+  const discountRate = quantity >= 3 ? 0.15 : quantity === 2 ? 0.08 : 0;
+  const finalPrice = Math.round(basePrice * quantity * (1 - discountRate));
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 text-[#1E2533]">
+      
+      {/* 🏷️ ১. ডাইনামিক টায়ার্ড ডিসকাউন্ট ম্যাট্রিক্স */}
+      <div className="bg-white border border-[#C0A06B]/30 p-6 rounded-3xl shadow-sm space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-sm font-extrabold text-[#1E2533]">📦 Bulk & Bundle Savings</h3>
+          <span className="text-xs bg-[#C0A06B]/20 text-[#C0A06B] px-3 py-1 rounded-full font-bold">
+            {quantity >= 3 ? '15% OFF Applied!' : quantity === 2 ? '8% OFF Applied!' : 'Buy more, save more!'}
+          </span>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[#1E2533]/5 p-4 rounded-2xl border border-gray-200">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold uppercase text-gray-600">Select Quantity:</span>
+            <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden bg-white">
+              <button 
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="px-3 py-1.5 font-bold hover:bg-gray-100 transition"
+              >
+                -
+              </button>
+              <span className="px-4 py-1.5 font-bold text-xs">{quantity}</span>
+              <button 
+                onClick={() => setQuantity(quantity + 1)}
+                className="px-3 py-1.5 font-bold hover:bg-gray-100 transition"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <span className="text-xs text-gray-500 block">Total Calculated Price:</span>
+            <span className="text-lg font-black text-[#C0A06B]">৳ {finalPrice.toLocaleString('bn-BD')}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 📊 ২. সাইজ ফিট অ্যানালাইসিস রিভিউ বার */}
+      <div className="bg-[#1E2533]/5 border border-[#C0A06B]/30 p-6 rounded-3xl space-y-3">
+        <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#1E2533]">✨ Smart Fit & Size Feedback</h4>
+        <p className="text-xs text-gray-600">Based on feedback from 120+ verified Anusmita buyers:</p>
+        
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs font-bold">
+            <span>True to Size (88%)</span>
+            <span className="text-[#C0A06B]">Perfect Fit</span>
+          </div>
+          <div className="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+            <div className="bg-[#C0A06B] h-full rounded-full" style={{ width: '88%' }}></div>
+          </div>
+          <div className="flex justify-between text-[10px] text-gray-500">
+            <span>Runs Slightly Small (7%)</span>
+            <span>Runs Slightly Large (5%)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+এই অ্যাডভান্সড ফিচারগুলো আপনার Anusmita প্ল্যাটফর্মের প্রোডাক্ট ডিটেইলস পেজটিকে পুরোপুরি একটি বিশ্বমানের এবং গ্রাহক-বান্ধব ই-কমার্স সিস্টেমে পরিণত করবে। এই প্রজেক্টের অন্য কোনো মডিউল বা ব্যাকএন্ড লজিক নিয়ে কি আরও কাজ করতে চান?
+
+

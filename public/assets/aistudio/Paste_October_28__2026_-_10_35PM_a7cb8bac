@@ -1,0 +1,910 @@
+You are the lead full-stack engineer and UI/UX designer for ANUSMITA, a premium beauty, fashion and lifestyle ecommerce brand in Bangladesh.
+
+Implement a complete, cohesive, responsive ecommerce website from this specification. Write working code, connect the page flows, and validate the implementation. Do not stop at a plan or produce disconnected mockups.
+
+No reference images are required. This document is the design and functional specification.
+
+IMPORTANT PROJECT CONTEXT
+The page designs have already been decided. Preserve the established visual direction described below. If an existing project is supplied, inspect it first and improve or complete it without replacing working features.
+
+Project: ANUSMITA
+Tagline: FASHION · JEWELLERY · BEAUTY
+Production URL: https://anusmita.netlify.app
+Repository: https://github.com/cehfdrmdsakibmollah/Anusmita
+
+Do not claim to have accessed, edited, tested or deployed the existing repository unless you actually have access and performed those actions.
+
+If source code is unavailable, create an implementation using the specified stack and clearly explain that it has not yet been merged into the existing project.
+
+==================================================
+1. TECHNOLOGY AND ARCHITECTURE
+==================================================
+
+Preferred stack:
+- Next.js App Router
+- React and TypeScript with strict types
+- Reuse the existing project's styling system
+- MongoDB Atlas with Mongoose for persistent application data
+- Cloudinary for approved image and video uploads
+- Netlify-compatible deployment
+- Accessible, consistent SVG icons
+- Server-side validation for all mutations
+
+Use shared components for:
+- Header and navigation
+- Footer
+- Buttons and form controls
+- Product cards
+- Category filters
+- Pagination
+- Breadcrumbs
+- Dialogs and drawers
+- Loading, error and empty states
+- Order status timelines
+- Support and chatbot interfaces
+
+Avoid duplicating similar page implementations.
+
+Keep secrets on the server. Never expose MongoDB credentials, session secrets, payment secrets or Cloudinary signing secrets through public environment variables.
+
+Preserve STORE_MODE=catalog when checkout is not configured. Browsing and previews should work, but orders, payments, gift cards and reservations must not falsely report success.
+
+==================================================
+2. BRAND AND VISUAL DESIGN
+==================================================
+
+Overall direction:
+Elegant, warm, spacious, feminine and premium, with blush pink, ivory, muted rose and restrained charcoal.
+
+Do not switch the website to a navy-and-gold theme.
+Do not use neon pink, excessive gradients, oversized shadows or crowded layouts.
+
+Create shared design tokens:
+
+--background: #FFFAF7;
+--surface: #FFFFFF;
+--surface-warm: #FFF7F3;
+--blush: #F9E9ED;
+--blush-soft: #FDF1F3;
+--primary: #B74764;
+--primary-hover: #9F3652;
+--primary-soft: #F4DCE3;
+--heading: #211D20;
+--body: #514950;
+--muted: #746B70;
+--border: #EADDE0;
+--footer: #252525;
+--footer-text: #F8F3F0;
+
+Validate contrast and adjust individual text shades when necessary.
+
+Typography:
+- Elegant editorial serif for major headings and the ANUSMITA wordmark.
+- Readable sans-serif for navigation, forms, body copy and buttons.
+- Bengali-capable fallback font.
+- Responsive heading sizes using clamp().
+- Avoid exaggerated letter spacing in paragraphs.
+- Comfortable body line-height around 1.6.
+
+Layout:
+- Maximum content width around 1200–1280px.
+- Desktop horizontal padding 32–48px.
+- Tablet horizontal padding 24px.
+- Mobile horizontal padding 16–20px.
+- Desktop section spacing 64–88px.
+- Mobile section spacing 36–48px.
+- Card gaps 20–28px on desktop and 12–16px on mobile.
+- Card padding 20–28px where appropriate.
+- Rounded corners around 10–16px.
+- Subtle borders and restrained shadows.
+- Generous space between headings, descriptions, controls and cards.
+
+The website must feel spacious. Nothing should look pressed against the next section.
+
+Interactions:
+- Subtle transitions of approximately 150–250ms.
+- Respect prefers-reduced-motion.
+- Visible keyboard focus.
+- Minimum comfortable touch target around 44px.
+- Avoid unnecessary autoplay.
+- Carousels must have accessible controls and pause behavior.
+
+Imagery:
+- Consistent product image ratios.
+- Beauty imagery: soft daylight, blush fabric, warm stone, clean product compositions.
+- Fashion, watches, bags, bedsheets and accessories should use relevant category imagery while retaining the same site structure and brand colors.
+- Use supplied or licensed assets.
+- If authentic assets are missing, use clearly identified placeholders.
+- Do not fabricate customer photos, endorsements or brand certifications.
+- Do not implement pages as full-page screenshots.
+
+==================================================
+3. HEADER, NAVIGATION AND FOOTER
+==================================================
+
+Desktop header:
+- ANUSMITA text wordmark.
+- Small tagline below it.
+- Navigation to Home, Shop, Bundles, Deals, Journal and Contact.
+- Accessible More menu for additional pages.
+- Search, account and shopping bag controls.
+
+Mobile header:
+- Menu button.
+- ANUSMITA wordmark.
+- Search and shopping bag controls.
+- Accessible mobile navigation drawer.
+
+Footer:
+- Charcoal background.
+- Text-only ANUSMITA wordmark.
+- Tagline: FASHION · JEWELLERY · BEAUTY
+- No additional pictorial brand logo.
+- No repeated decorative logos.
+- No WhatsApp or Messenger icons in the footer.
+
+Footer columns:
+Customer Care:
+- Track Your Order
+- Shipping & Delivery
+- Returns & Refunds
+- Contact Us
+- FAQ
+
+Shop:
+- All Products
+- Beauty
+- Fashion
+- Home & Lifestyle
+
+Bottom row:
+- Dynamic copyright year.
+- Privacy Policy.
+- Terms of Service.
+
+Use the same footer throughout the website.
+
+==================================================
+4. CONTACT DETAILS
+==================================================
+
+Use these exact values:
+
+Display phone: +880 1310-339192
+Telephone link: tel:+8801310339192
+WhatsApp link: https://wa.me/8801310339192
+Messenger link: https://m.me/AnusmitaBD
+Email: anusmitashopbd@gmail.com
+Email link: mailto:anusmitashopbd@gmail.com
+
+Use these in the Contact page and relevant support interfaces.
+Do not invent an office address, opening hours or additional phone numbers.
+Use a configurable Facebook Page URL rather than assuming an unverified one.
+
+==================================================
+5. HOMEPAGE /
+==================================================
+
+Build a polished, admin-manageable homepage containing:
+- Hero carousel with image, title, description and CTA.
+- Category navigation.
+- Promotional banners.
+- New Arrivals.
+- Best Sellers.
+- Trending Products.
+- Popular Products.
+- Recommended Products.
+- Flash deal section with a genuine expiry countdown.
+- Bundle offers.
+- Selected community stories when approved content exists.
+- Journal or skincare guides.
+- Support CTA.
+
+Categories:
+- Skincare
+- Beauty / Makeup
+- Fashion
+- Jewellery when available
+- Watches
+- Mobile Accessories
+- Bedsheets
+- Perfumes
+- Bags
+
+Homepage Studio in the admin dashboard must support:
+- Add, edit, delete and reorder sections.
+- Draft and publish.
+- Visibility and scheduling.
+- Banner and image uploads.
+- CTA text and destination.
+- Category selection.
+- Product collection selection.
+- Offer countdown dates.
+- Preview before publishing.
+
+Expired offers must stop appearing automatically.
+Do not show invented sales figures, reviews or discounts.
+
+==================================================
+6. SHOP /products
+==================================================
+
+All-products page with a clear heading, product count and active filters.
+
+Desktop sidebar / mobile filter drawer:
+- Country of origin: Japan, Korea, China.
+- Category.
+- Price range slider plus editable minimum and maximum values.
+- Skin type where relevant.
+- Concern: Acne, Pigmentation, Brightening, Sensitive, Dryness and Uneven Tone, based on actual product metadata.
+- Stock availability if supported.
+
+Sorting:
+- Newest
+- Price: Low to High
+- Price: High to Low
+- Popularity based on genuine data
+
+Requirements:
+- Filters reflected in URL query parameters.
+- Removable active-filter chips.
+- Clear all.
+- Pagination or accessible load more.
+- Useful empty state.
+- Product image, name, price and legitimate sale information.
+- Wishlist action.
+- Responsive grid with two columns on suitable mobile widths.
+- Skincare-specific filters should not clutter unrelated categories.
+
+==================================================
+7. PRODUCT DETAILS
+==================================================
+
+Include:
+- Image gallery and accessible image viewing.
+- Product title, brand and origin.
+- Price and legitimate discount information.
+- Actual stock state.
+- Available variants.
+- Quantity selector.
+- Add to cart when purchasing is enabled.
+- Wishlist.
+- Description and specifications.
+- Ingredients and usage instructions where appropriate.
+- Shipping and return information.
+- Real approved reviews.
+- Related products.
+- Support entry point.
+
+Perfume volume options may include:
+2ml, 5ml, 7ml, 10ml, 15ml, 50ml and 100ml,
+but show only variants actually configured for that product.
+
+Variant selection must update price, image and availability correctly.
+
+==================================================
+8. CART AND CHECKOUT
+==================================================
+
+Cart page and cart drawer:
+- Product image and chosen variant.
+- Quantity adjustment.
+- Remove item.
+- Coupon input.
+- Subtotal.
+- Shipping estimate when available.
+- Clearly calculated total.
+- Checkout CTA.
+- Empty cart state.
+
+Validate price, stock, discounts and totals on the server.
+
+Checkout:
+- Customer name.
+- Phone number.
+- Email where needed.
+- Delivery address.
+- District and delivery area.
+- Optional delivery notes.
+
+Shipping:
+- Inside Dhaka.
+- Outside Dhaka, within Bangladesh.
+- Treat international shipping as a separate configurable option.
+- Do not assume international delivery is available.
+
+Payment options:
+- bKash.
+- Nagad.
+- Cash on Delivery.
+
+Only enable payment methods that are genuinely configured.
+Do not simulate successful payment.
+
+Order confirmation:
+- Order ID.
+- Order summary.
+- Payment state.
+- Delivery details.
+- Tracking reference when actually assigned.
+- Track order link.
+- Printable invoice link.
+
+Use idempotent order creation and verified payment callbacks where applicable.
+
+==================================================
+9. PRINTABLE INVOICE
+==================================================
+
+Create an attractive invoice matching the blush, ivory and rose design.
+
+Include:
+- ANUSMITA wordmark and tagline.
+- Invoice number and date.
+- Order reference.
+- Customer and delivery details.
+- Product line items.
+- Quantity and unit price.
+- Discount.
+- Shipping.
+- Total.
+- Payment method and actual payment state.
+- Contact details.
+
+Provide Print / Save as PDF using browser printing.
+
+Print stylesheet:
+- Clean A4 layout.
+- Hide navigation, chatbot and interactive controls.
+- Prevent clipped columns and unnecessary page breaks.
+- Keep invoice text readable in monochrome.
+- Do not label unpaid orders as paid.
+
+==================================================
+10. CUSTOMER ACCOUNTS
+==================================================
+
+Login and registration:
+- Email-based login.
+- Phone verification only if an actual OTP provider is configured.
+- Google sign-in only if configured.
+- Password reset.
+- Clear validation and error handling.
+- Secure server-managed sessions.
+
+Customer dashboard:
+- My Orders.
+- Order details.
+- Status: Pending, Processing, Packed, Shipped, Out for Delivery, Delivered, Cancelled where applicable.
+- Saved Addresses CRUD.
+- Wishlist.
+- Profile settings.
+- Logout.
+
+Customers may access only their own private information.
+
+==================================================
+11. ABOUT /about
+==================================================
+
+Tell the ANUSMITA brand story through:
+- Editorial hero.
+- Brand introduction.
+- Commitment to carefully sourced Asian beauty, fashion and lifestyle products.
+- Korea, Japan and China sourcing context.
+- Brand values.
+- Relevant category imagery.
+- Contact or shop CTA.
+
+Do not invent founding dates, team members, certifications or supplier verification.
+Use business-approved authenticity claims only.
+
+==================================================
+12. CONTACT /contact
+==================================================
+
+Include:
+- Friendly editorial heading.
+- Contact form.
+- Phone.
+- Email.
+- Direct WhatsApp link.
+- Direct Messenger link.
+- Configurable Facebook Page link.
+
+Contact form:
+- Name.
+- Email or phone.
+- Subject.
+- Message.
+- Server validation.
+- Spam protection.
+- Clear pending, success and failure states.
+
+Only show success when the message has actually been accepted by the configured service.
+
+Keep WhatsApp and Messenger actions in the contact/support content, not in the footer.
+
+==================================================
+13. BEAUTY JOURNAL /journal
+==================================================
+
+Build:
+- Journal listing.
+- Topic filters.
+- Search if useful.
+- Article detail pages.
+- Related articles.
+- Relevant product links.
+- Responsive editorial imagery.
+
+Topics may include:
+- Skincare basics.
+- Skin types.
+- Product usage.
+- Routine building.
+- Beauty and lifestyle guides.
+
+Use accurate metadata and semantic headings.
+Do not invent medical expertise or unsupported treatment claims.
+Article recommendations must remain educational rather than diagnostic.
+
+==================================================
+14. CHATBOT
+==================================================
+
+Integrate one cohesive ANUSMITA assistant matching the existing page colors.
+
+Features:
+- Responsive floating launcher and chat panel.
+- Bengali and English support.
+- Suggested questions.
+- Product search and product cards.
+- Product image and product-link attachments.
+- Customer image attachments if a secure upload service is configured.
+- Order tracking assistance through a secure authorized flow.
+- Shipping, returns and FAQ answers from approved content.
+- Human support links.
+- Loading, retry and error states.
+- Clear conversation reset.
+- Accessible keyboard navigation.
+
+Reply sound:
+- Optional notification sound.
+- User-controlled sound toggle.
+- Respect browser interaction requirements.
+- Persist preference.
+- Avoid repeated sounds and background noise.
+
+Security and behavior:
+- Never invent product availability, prices or order status.
+- Never expose another customer's data.
+- Never request passwords, OTPs or payment credentials.
+- Validate file type and size.
+- Store API keys server-side.
+- Rate-limit requests.
+- If AI or upload services are unavailable, provide an honest fallback.
+- Do not present scripted demo replies as a live AI integration.
+
+==================================================
+15. POLICY AND LEGAL PAGES
+==================================================
+
+Create:
+- /shipping-policy
+- /return-policy
+- /privacy-policy
+- /terms
+- /faq
+
+Use existing route names if the repository already has equivalents.
+
+Design:
+- Consistent breadcrumb and hero.
+- Readable content width.
+- Clear section headings.
+- Table of contents for longer documents.
+- Accessible FAQ accordions.
+- Support CTA.
+- Shared footer.
+
+Shipping:
+- Configurable Dhaka and outside-Dhaka charges.
+- Configurable delivery time ranges.
+
+Returns:
+- Eligibility.
+- Request process.
+- Required evidence where applicable.
+- Refund process and timing.
+
+Privacy:
+- Explain only the data handling actually implemented.
+
+Do not invent commercial policy terms, charges, deadlines or legal guarantees.
+Missing policy information should be flagged for the business owner and kept as draft configuration.
+
+==================================================
+16. FLASH DEALS /deals
+==================================================
+
+Include:
+- Promotional hero.
+- Genuine countdown timer.
+- Active deal cards.
+- Relevant category filters.
+- Real prices and configured discounts.
+- Stock-aware purchasing actions.
+- Empty and expired states.
+
+Use server-authoritative offer dates.
+Do not reset countdowns artificially or create false scarcity.
+
+==================================================
+17. BUNDLES /bundles
+==================================================
+
+Include:
+- Premium bundle hero.
+- Featured skincare routine bundle.
+- Included-product breakdown.
+- Actual bundle price and savings.
+- Category tabs.
+- Bundle cards.
+- Bundle detail view.
+- Support CTA.
+
+Example structure:
+Cleanser + Toner + Serum + Sunscreen.
+
+Only display bundle savings calculated from actual configured prices.
+Validate constituent product availability before purchase.
+
+==================================================
+18. ROUTINE QUIZ /routine-quiz
+==================================================
+
+Hero:
+“Your skin. Your routine.”
+“A few simple questions. A routine made for you.”
+
+Four-step flow:
+1. Skin type.
+2. Concerns.
+3. Preferences.
+4. Your routine.
+
+Skin type:
+- Oily.
+- Dry.
+- Combination.
+- Not sure.
+
+Concerns:
+- Acne.
+- Pigmentation.
+- Dryness.
+- Uneven tone.
+- Sensitivity where supported.
+
+Results:
+- AM / PM tabs.
+- Cleanser.
+- Moisturizer.
+- Sunscreen for daytime.
+- Other suitable products based on actual catalog metadata.
+- Explain why a product category is suggested.
+- Edit answers.
+- Save routine when supported.
+- Product links.
+- Support CTA.
+
+Do not claim medical diagnosis or guaranteed results.
+If inventory is unavailable, label recommendations as illustrative.
+
+==================================================
+19. TRACK ORDER /track-order
+==================================================
+
+Hero:
+“A little closer to you.”
+“Follow your ANUSMITA order, every step of the way.”
+
+Form:
+- Order ID.
+- Phone number used at checkout.
+
+Result:
+- Order reference.
+- Last update.
+- Current status.
+- Timeline:
+  Confirmed → Processing → Packed → Out for Delivery → Delivered
+- Estimated delivery when available.
+- Masked delivery details.
+- Shipment details.
+- Tracking history.
+- Support CTA.
+
+Privacy:
+- Rate limiting.
+- Generic failure responses.
+- No customer data exposure before verification.
+- Stronger verification for sensitive details where necessary.
+
+Preview examples must be clearly labeled and isolated from real order lookups.
+
+==================================================
+20. CUSTOMER STORIES /customer-stories
+==================================================
+
+Hero:
+“Your moments. Our favourite stories.”
+
+Include:
+- Category tabs.
+- Photo / video filters.
+- Sorting.
+- Responsive gallery.
+- Story detail dialog or page.
+- Related product links.
+- Load more or pagination.
+- Share your story CTA.
+
+Submission:
+- Photo or video.
+- Caption.
+- Related product when applicable.
+- Explicit publishing consent.
+- Secure upload validation.
+- Moderation before publishing.
+
+Do not publish submissions automatically.
+Do not fabricate reviews, customer identities or verified-purchase badges.
+Sample content must be labeled as sample content.
+Do not show a working video play button without a real video.
+
+==================================================
+21. GIFT CARDS /gift-cards
+==================================================
+
+Hero:
+“A little gift. Endless possibilities.”
+
+Personalization:
+- Classic, Blush and Celebration visual styles.
+- Configurable amounts, initially 500, 1,000, 2,000 and 5,000 BDT as preview values.
+- Recipient name.
+- Recipient email.
+- Sender name.
+- Optional message.
+- Send after purchase.
+- Schedule for later.
+- Live visual preview.
+- Order summary.
+
+Include:
+- How it works.
+- FAQ.
+- Support CTA.
+
+Production requirements:
+- Verified payment before issuance.
+- Secure voucher code generation.
+- Server-side balance ledger.
+- Protection against duplicate issuance and redemption.
+- Actual email delivery service.
+- Business-approved expiry and redemption rules.
+
+Do not issue a usable voucher or claim an email was sent in preview mode.
+
+==================================================
+22. PRE-ORDERS /pre-orders
+==================================================
+
+Hero:
+“Worth the wait. Yours to reserve.”
+“Discover our next arrivals from Korea, Japan and China.”
+
+Sections:
+- Overseas arrivals hero.
+- Featured shipment batch.
+- Origin filters.
+- Product cards.
+- Batch details.
+- How pre-orders work.
+- FAQ.
+- Support CTA.
+
+Batch information:
+- Batch ID.
+- Origin city and destination.
+- Status.
+- Last update.
+- Estimated warehouse arrival range.
+
+Timeline:
+Confirmed → In transit → Customs → Arrived
+
+Cards:
+- Product image.
+- Origin badge.
+- Batch status.
+- Product name.
+- Batch ID.
+- Estimated arrival.
+- Price.
+- View pre-order button.
+
+Detail view:
+- Product information.
+- Shipment timeline.
+- Quantity selector.
+- Product total.
+- Actual advance-payment terms.
+- Delivery charges or calculation explanation.
+- Booking terms.
+- Continue action only when configured.
+
+Arrival estimates must be identified as estimates.
+Warehouse arrival and customer delivery are different events.
+“Live” tracking requires a real data source; otherwise identify updates as admin-maintained.
+Never present sample dates as live shipment information.
+
+==================================================
+23. ADMIN DASHBOARD
+==================================================
+
+Build or complete secure role-based administration.
+
+Modules:
+- Products and variants.
+- Categories and origins.
+- Inventory.
+- Orders and fulfillment status.
+- Customers with appropriate access restrictions.
+- Homepage Studio.
+- Banners and promotions.
+- Deals.
+- Bundles.
+- Coupons.
+- Journal.
+- FAQs and policy content.
+- Customer story moderation.
+- Gift card configuration and transactions.
+- Pre-order batches and booking settings.
+- Chatbot approved knowledge and settings.
+- Shipping rates.
+- Contact settings.
+- Media library.
+
+For applicable content:
+- Create.
+- Read.
+- Update.
+- Delete or archive.
+- Draft / publish.
+- Reorder.
+- Schedule.
+- Preview.
+
+Protect financial and order records from destructive deletion; use appropriate cancellation or archival workflows.
+
+Security:
+- Owner/admin roles.
+- Server-side authorization.
+- Validation.
+- Audit logs.
+- Conflict protection for simultaneous edits.
+- No public admin-registration endpoint.
+- Secure initial owner setup.
+
+==================================================
+24. DATA AND BACKEND
+==================================================
+
+Inspect existing models before creating new ones.
+
+Possible domains:
+- Users.
+- Addresses.
+- Products and variants.
+- Categories.
+- Inventory.
+- Orders and order items.
+- Coupons.
+- Homepage sections.
+- Promotions.
+- Bundles.
+- Journal articles.
+- Customer stories.
+- Gift card transactions.
+- Pre-order batches.
+- Settings.
+- Audit logs.
+
+Use integer minor units for monetary calculations.
+Store timestamps consistently and display customer-facing dates in Asia/Dhaka where appropriate.
+Validate Bangladeshi phone numbers without rejecting legitimate international formats when supported.
+
+If configuration is missing:
+- Keep browsing functional.
+- Show honest empty or unavailable states.
+- Provide an environment-variable template containing names only.
+- Never insert real secrets into source code.
+- Document what requires connection.
+
+Do not introduce Firebase merely to duplicate MongoDB data.
+Reuse the existing authentication and data architecture unless there is a concrete reason to change it.
+
+==================================================
+25. SEO, ACCESSIBILITY AND PERFORMANCE
+==================================================
+
+- Unique page titles and descriptions.
+- Correct canonical URLs.
+- Sitemap for public production pages.
+- Noindex for design-preview and private account pages.
+- Structured data only for genuine matching content.
+- Semantic HTML.
+- Proper form labels and error associations.
+- Accessible dialogs, drawers and accordions.
+- Focus management and Escape behavior.
+- Optimized images with defined dimensions.
+- Lazy loading below the fold.
+- Avoid layout shifts.
+- Reasonable JavaScript bundle sizes.
+- No horizontal overflow.
+- Respect reduced motion.
+- Graceful behavior with slow connections.
+
+==================================================
+26. IMPLEMENTATION WORKFLOW
+==================================================
+
+1. Inspect the supplied project and identify existing routes, components, models and integrations.
+2. Briefly state what already works and what is missing.
+3. Establish shared design tokens and reusable layout components.
+4. Implement or refine all requested pages consistently.
+5. Connect navigation and interactive flows.
+6. Connect available backend services securely.
+7. Keep missing integrations honestly disabled or clearly marked as preview.
+8. Run available lint, TypeScript checks, meaningful tests and production build.
+9. Inspect desktop and mobile layouts if browser tools are available.
+10. Fix observed issues before reporting completion.
+
+Do not repeatedly ask for permission for routine reversible implementation decisions.
+Ask only when a business fact, credential or irreversible action genuinely requires owner input.
+Continue independent implementation while waiting for missing configuration.
+
+Do not overwrite unrelated work.
+Do not change production settings or enable purchases merely to make a demo appear complete.
+
+==================================================
+27. ACCEPTANCE CRITERIA
+==================================================
+
+The implementation is complete only when:
+- All requested routes exist or map to existing equivalent routes.
+- Every page follows the same visual system.
+- Spacing is comfortable.
+- Mobile layouts are usable.
+- Header and footer are consistent.
+- Every interactive control works or clearly explains its unavailable state.
+- Form validation is visible and accessible.
+- No fake payment, order, review, tracking or upload success is shown.
+- Private data is protected.
+- No secrets are exposed.
+- No broken images or internal navigation links remain.
+- Available checks pass.
+- Remaining integration limitations are documented accurately.
+
+Final handoff:
+- Summarize completed changes.
+- List actual verification results.
+- Identify remaining configuration.
+- Provide preview or deployment URLs only if they genuinely exist.
+- Never claim “100% perfect” without evidence.
+- Do not claim production deployment unless it was actually verified.
+
+Start implementing now. Preserve ANUSMITA’s approved blush-pink, ivory and muted-rose identity across the entire website.

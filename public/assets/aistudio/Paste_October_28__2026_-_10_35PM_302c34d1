@@ -1,0 +1,1330 @@
+ANUSMITA ULTIMATE E-COMMERCE ERP & BUSINESS MANAGEMENT MASTER PROMPT
+
+Continue the existing ANUSMITA e-commerce project and integrate a complete, modular business management system. Preserve working features, existing data, branding, and deployments. Audit the current repository before making changes.
+
+1. COMPLETE SALES, REVENUE, COST AND PROFIT MANAGEMENT
+
+Build an auditable financial dashboard connected to actual orders, payments, inventory, suppliers, expenses, refunds, and courier transactions.
+
+Track:
+
+- Gross sales and net sales.
+- Order value, confirmed orders, delivered orders, and returned orders.
+- Revenue collected and outstanding customer balances.
+- Product purchase cost and cost of goods sold (COGS).
+- Supplier invoices and outstanding supplier payments.
+- Courier charges, packaging costs, payment gateway fees, marketing expenses, and operating expenses.
+- Discounts, coupon costs, refunds, returns, and losses.
+- Gross profit, estimated operating profit, and net profit where sufficient data is available.
+- Cash flow and payment reconciliation.
+- Profit margin by product, category, brand, order, and date range.
+- Daily, weekly, monthly, and custom-period reports.
+
+Clearly distinguish:
+
+1. Ordered sales.
+2. Confirmed sales.
+3. Delivered sales.
+4. Revenue actually collected.
+5. Outstanding receivables.
+6. Supplier payables.
+7. Estimated profit.
+8. Reconciled profit.
+
+Never count an order as collected revenue merely because it was placed. Exclude cancelled and test orders from valid sales totals. Record refunds, payment reversals, courier collection, and COD settlements accurately.
+
+Support BDT as the primary currency, with configurable currency formatting.
+
+2. ADVANCED INVENTORY AND STOCK MANAGEMENT
+
+Create a complete inventory system supporting 1,000+ products and future growth.
+
+Features:
+
+- SKU, barcode, QR code, product variants, batch/lot and expiry fields where relevant.
+- Opening stock, stock received, stock sold, reserved stock, returned stock, damaged stock, and adjustments.
+- Real-time stock movement history.
+- Low-stock and out-of-stock alerts.
+- Reorder thresholds and suggested purchase quantities.
+- Stock transfer between locations if multiple locations are introduced.
+- Stocktake and discrepancy reports.
+- Purchase cost history.
+- Supplier-specific product costs.
+- FIFO inventory costing where appropriate.
+- Configurable stock reservation and release rules.
+- Prevent overselling during concurrent checkouts.
+- Track returned items as sellable, damaged, or awaiting inspection.
+- Bulk stock updates with validation and audit logs.
+
+Keep physical stock, reserved stock, available stock, and incoming stock separate.
+
+3. SUPPLIER AND PURCHASE MANAGEMENT
+
+Build a dedicated supplier management module.
+
+Supplier records:
+
+- Supplier name and company.
+- Contact person and authorized contact details.
+- Phone, email, address, and notes.
+- Supplied brands, products, and SKUs.
+- Purchase history and negotiated costs.
+- Payment terms and credit limits where agreed.
+- Outstanding balances and payment history.
+- Supplier performance and lead times.
+
+Purchase workflow:
+Draft purchase order → Submitted → Partially received → Fully received → Supplier invoice matched → Partially paid → Fully paid.
+
+Support:
+
+- Purchase orders.
+- Partial deliveries and backorders.
+- Goods received notes.
+- Supplier invoices.
+- Purchase returns and supplier credits.
+- Multiple supplier payments.
+- Due dates and payable reminders.
+- Purchase cost changes and stock valuation.
+- CSV import/export.
+- Supplier statement and payable reports.
+
+Only increase stock for quantities actually received and verified. Avoid duplicate stock increases if the same receiving action is retried.
+
+4. FLEXIBLE PAYMENT AND ADVANCED PAYMENT SYSTEM
+
+Build a payment ledger that supports multiple payment methods and payment events per order.
+
+Payment methods:
+
+- Cash on Delivery.
+- bKash.
+- Nagad.
+- Bank transfer.
+- Cash and manual collection.
+- Approved online payment gateways.
+- Future providers through a modular payment adapter.
+
+Support:
+
+- Full payment.
+- Partial advance payment.
+- Remaining balance payable on delivery.
+- Split payments using multiple supported methods.
+- Configurable advance amount or percentage.
+- Fixed-amount or percentage-based deposit.
+- Admin-approved flexible payment terms.
+- Due dates and outstanding balance tracking.
+- Payment references and transaction IDs.
+- Manual payment verification with an audit trail.
+- Refunds and payment reversals.
+- Payment reconciliation reports.
+- Customer payment history and receipts.
+
+Create configurable policies for which products, customers, or orders are eligible for partial payments. Validate minimum deposits and remaining balances on the server.
+
+Never mark a payment as verified from a screenshot alone. For manual transfers, require authorized review and a transaction reference. For automated gateways, verify payment status through the provider's server-side verification mechanism.
+
+5. bKash, NAGAD, BANK AND PAYMENT GATEWAY INTEGRATION
+
+Implement provider adapters rather than hardcoding payment logic into checkout.
+
+For bKash and Nagad:
+
+- Verify the currently available official merchant or checkout API.
+- Confirm merchant eligibility and account requirements.
+- Support initiation, callback handling, server-side verification, and transaction recording where officially supported.
+- Handle failed, pending, expired, duplicate, and reversed transactions.
+- Verify signatures or other security mechanisms where provided.
+- Keep merchant credentials in secure server-side environment variables.
+
+For bank transfers:
+
+- Generate a payment reference linked to the order.
+- Record submitted references and transaction information.
+- Support manual verification and reconciliation.
+- Integrate automated bank APIs only when an eligible provider officially offers access.
+
+For every gateway:
+
+- Use idempotency protection.
+- Prevent duplicate payment capture and duplicate order confirmation.
+- Keep order status separate from payment status.
+- Never store card security codes or raw payment credentials.
+- Never claim a gateway is live until real merchant credentials and an approved end-to-end test are available.
+
+If a provider charges fees or requires approval, document that dependency and provide COD/manual-transfer fallback.
+
+6. DISCOUNTS, COUPONS AND PROMOTIONS
+
+Build an advanced promotion engine supporting:
+
+- Percentage discounts.
+- Fixed-amount discounts.
+- Product-specific and category-specific discounts.
+- Buy-more-save-more offers.
+- Bundle discounts.
+- Coupon codes.
+- Minimum order value.
+- First-order discounts.
+- Customer-group offers.
+- Start/end dates and time zones.
+- Usage limits and per-customer limits.
+- Maximum discount caps.
+- Shipping discounts.
+- Optional campaign-specific landing pages.
+
+Calculate all discounts on the server. Define stacking and priority rules so incompatible offers cannot be combined accidentally.
+
+Track discount cost, redemption, revenue, conversion, and estimated profitability.
+
+Do not display false discounts or fabricate original prices.
+
+7. PROFESSIONAL INVOICE AND PRINTING SYSTEM
+
+Create a configurable invoice generator with ANUSMITA branding.
+
+Required printable formats:
+
+- A4 full-page invoice.
+- 80 mm thermal receipt.
+- 58 mm thermal receipt.
+- Optional packing slip, shipping label, delivery note, purchase order, supplier invoice, and refund receipt.
+
+Requirements:
+
+- Dedicated print layouts using appropriate CSS "@media print" and page-size rules.
+- A4 layout with proper margins, readable text, totals, payment details, and optional item tables.
+- 80 mm and 58 mm receipts with narrow layouts, appropriate typography, and minimal unnecessary whitespace.
+- Product name, SKU, quantity, unit price, discount, shipping, tax where applicable, total, paid amount, outstanding amount, and payment method.
+- Unique invoice number and issue date.
+- Customer and business details.
+- Order number and transaction references.
+- Configurable logo, colours, footer, contact details, and return policy.
+- Print preview and browser print support.
+- Downloadable PDF when a compatible PDF generation method is implemented.
+- Duplicate invoice printing without creating a new financial transaction.
+- Correct pagination and long-product-name handling.
+- Optional QR code linking to a secure order or invoice verification page.
+
+Make printed invoices usable from Android browsers and common thermal printers. Test actual print dimensions; do not rely solely on screen appearance.
+
+Separate invoice numbering from order numbering and preserve issued invoice records for auditability.
+
+8. COMPLETE CUSTOMER CHECKOUT
+
+Build a fast, mobile-first, low-friction checkout.
+
+Support:
+
+- Guest checkout.
+- Customer account checkout.
+- Bangladesh phone number validation.
+- Customer name, phone, district, area, address, and delivery instructions.
+- Configurable district/area delivery charges.
+- Product quantity and stock validation.
+- Coupon validation.
+- Full or partial payment selection.
+- COD eligibility rules.
+- Shipping estimates where reliable.
+- Order summary with clear totals.
+- Saved addresses for signed-in customers.
+- Duplicate-submission protection.
+- Server-side price recalculation.
+- Clear validation messages and recoverable errors.
+
+Do not require account creation merely to place a guest order unless a specific business rule requires it.
+
+Keep checkout fast, accessible, and usable on slower mobile connections.
+
+9. BANGLADESH COURIER AND DELIVERY ECOSYSTEM
+
+Create a courier adapter layer with a unified shipment dashboard.
+
+Investigate and support eligible official integrations for:
+
+- Pathao Courier.
+- REDX.
+- Steadfast Courier.
+- Other supported Bangladesh-wide courier services selected by the owner.
+
+Verify current API documentation, account eligibility, credentials, coverage, charges, and webhook capabilities before implementing each provider.
+
+Features:
+
+- Create courier shipment from an eligible order.
+- Store consignment and tracking IDs.
+- Generate shipping labels where supported.
+- Bulk shipment creation where officially supported.
+- Pickup request and shipment submission.
+- Tracking history and status timeline.
+- Delivery success/failure events.
+- COD amount and courier settlement tracking.
+- Delivery charges and return-to-origin charges.
+- Failed-delivery and return workflows.
+- Courier performance comparison.
+- District-wise delivery analytics.
+- Manual tracking updates if a provider has no available API.
+- Retry, timeout, rate-limit, and webhook error handling.
+
+Prevent duplicate shipments by using idempotency keys and provider references.
+
+Verify webhook authenticity where supported. Do not invent courier status events or claim that an order is shipped until submission is confirmed.
+
+10. FAKE ORDER PREVENTION AND BLACKLIST CONTROLS
+
+Create a risk-management system for suspicious orders.
+
+Signals can include:
+
+- Repeated unconfirmed COD orders.
+- Verified previous delivery failures.
+- Duplicate submissions.
+- Repeated suspicious phone/address combinations.
+- Rate-limit violations.
+- Unusual order patterns.
+
+Provide:
+
+- Risk scores and explanatory flags.
+- Manual review queue.
+- Configurable COD confirmation.
+- Optional OTP verification.
+- Admin-controlled allowlist and blocklist.
+- Reason, timestamp, and staff member for each block decision.
+- Expiry and appeal/review options.
+- Audit logs for risk decisions.
+
+Do not permanently block legitimate customers solely on automated predictions. Separate suspected fraud, confirmed abuse, failed delivery, and ordinary cancellation. Avoid relying on IP addresses alone.
+
+11. INCOMPLETE ORDER AND ABANDONED CART RECOVERY
+
+Track distinct stages:
+
+- Product viewed.
+- Added to cart.
+- Checkout started.
+- Customer details submitted.
+- Order successfully created.
+- Payment initiated.
+- Payment confirmed.
+- Order confirmed.
+- Delivered.
+
+Provide:
+
+- Abandoned-cart dashboard.
+- Incomplete checkout records where lawful and technically available.
+- Cart value and products.
+- Last activity and recovery status.
+- Checkout failure reasons.
+- Payment-pending queue.
+- Recovery campaign history.
+- Optional WhatsApp, email, or SMS reminders with appropriate consent.
+- Conversion and recovery analytics.
+
+Do not treat an abandoned cart as a real order. Do not expose personal checkout data to unauthorized staff or visitors.
+
+12. CUSTOMER NOTIFICATIONS
+
+Implement configurable notification events for:
+
+- Order placed.
+- Order confirmed.
+- Advance payment received.
+- Remaining payment due.
+- Payment verified or failed.
+- Order packed.
+- Shipment created.
+- Courier tracking updated.
+- Out for delivery.
+- Delivered.
+- Cancellation and refund.
+- Supplier payment reminders.
+- Low-stock alerts.
+- New or high-risk orders requiring review.
+
+Channels may include email, approved WhatsApp Business messaging, SMS providers, and in-dashboard notifications.
+
+Use message templates, delivery status tracking when available, retries, and notification logs.
+
+Do not promise instant delivery or unlimited free messages. Respect opt-in, provider rules, and customer communication preferences.
+
+13. UNLIMITED PRODUCT LANDING PAGES
+
+Create a reusable landing-page builder so the administrator can create many product and campaign landing pages without writing code.
+
+Support configurable sections:
+
+- Hero image or video.
+- Product gallery.
+- Product benefits based on verified product data.
+- Specifications and variants.
+- Price and legitimate offer.
+- Add-to-cart or quick checkout.
+- Customer reviews.
+- FAQs.
+- Related products.
+- Delivery information.
+- Trust and policy information.
+- Campaign-specific banners.
+- SEO title, description, canonical URL, social image, and indexing controls.
+
+Provide draft, preview, publish, unpublish, schedule, and archive states where supported.
+
+Allow custom slugs and safe URL validation. Prevent duplicate slugs and accidental publication of unfinished pages.
+
+“Unlimited” means no arbitrary application-imposed page count; actual database, storage, bandwidth, and hosting quotas still apply.
+
+14. ADVANCED SECURITY AND PERMISSIONS
+
+Implement:
+
+- Secure authentication and password hashing.
+- Role-based access control.
+- Owner, administrator, sales, finance, inventory, purchasing, support, and analyst roles.
+- Optional multi-factor authentication.
+- Secure sessions and cookies.
+- Server-side authorization on every sensitive API.
+- Request validation, rate limiting, and safe error handling.
+- Protection against injection, XSS, CSRF where applicable, and unsafe uploads.
+- Strict CORS policy.
+- Secure environment-variable management.
+- Payment/courier webhook verification.
+- Audit logs for financial, stock, order, supplier, and permission changes.
+- Login and suspicious-activity alerts.
+- Data export and appropriate deletion workflows.
+- Backup, restore, and incident-recovery procedures.
+
+Never expose database credentials, API keys, payment secrets, or sensitive customer information in frontend code or logs.
+
+15. ADVANCED DASHBOARD AND REPORTS
+
+Create a responsive dashboard with:
+
+- Real-time or appropriately refreshed business KPIs.
+- Sales, profit, cost, and cash-flow charts.
+- Orders and payment reconciliation.
+- Inventory and purchase management.
+- Supplier balances.
+- Courier tracking and settlements.
+- Fraud review.
+- Abandoned-cart recovery.
+- Customer analytics.
+- Marketing and coupon analytics.
+- Invoice management.
+- Audit history.
+- CSV exports and printable reports.
+
+Make dashboard figures traceable to source records. Clearly indicate when a figure is estimated, pending reconciliation, or incomplete due to missing cost data.
+
+16. FAST PERFORMANCE AND RENDERING
+
+Prioritize fast loading on Android devices and slower connections.
+
+- Use Next.js Server Components by default where appropriate.
+- Use static generation or server rendering based on page requirements.
+- Keep Client Components and JavaScript bundles small.
+- Use optimized responsive WebP/AVIF images.
+- Lazy-load below-the-fold media.
+- Use video posters and click-to-play.
+- Paginate large catalogues and admin tables.
+- Add appropriate MongoDB indexes.
+- Avoid unbounded database queries.
+- Cache public catalogue data with correct invalidation.
+- Keep checkout, payment, and stock validation authoritative on the server.
+- Avoid blocking rendering with analytics, chat, or marketing scripts.
+- Measure Core Web Vitals, bundle size, database performance, and API latency.
+
+Do not claim a performance score without testing. Do not allow stale cached stock or pricing to determine checkout totals.
+
+17. ARCHITECTURE, FREE TIERS AND MIGRATION
+
+Keep the system modular and portable.
+
+Audit the existing application before selecting Cloudflare, Vercel, Render, or another hosting option. Check current free-tier quotas, runtime compatibility, production-use terms, background-job limitations, database storage, and media limits.
+
+Use:
+
+- External media storage instead of storing image binaries in MongoDB.
+- Environment-based provider configuration.
+- Database migrations and backups.
+- Idempotent payment and courier workflows.
+- A documented deployment and rollback process.
+- A path to a custom domain and future VPS hosting.
+
+Do not assume a free tier will remain available forever. Avoid paid integrations unless required, and document any unavoidable provider fees.
+
+18. REQUIRED TESTS
+
+Verify:
+
+1. Sales, revenue, costs, profit, and payment balances against source records.
+2. Partial advance payment plus remaining COD balance.
+3. Failed, duplicate, pending, reversed, and refunded payments.
+4. Stock receiving, stock reservation, cancellation, and return.
+5. Supplier purchase order and partial receiving.
+6. Duplicate CSV import protection.
+7. A4, 80 mm, and 58 mm print layouts.
+8. Courier shipment creation and tracking using official test facilities where available.
+9. Fake-order flags, manual review, and false-positive handling.
+10. Abandoned-cart tracking without creating false orders.
+11. Notification retry and opt-out handling.
+12. Landing-page publishing and SEO metadata.
+13. Role-based access and unauthorized API requests.
+14. Mobile checkout, performance, and accessibility.
+15. Backup restoration and rollback procedures.
+
+Report pass/fail results. Mark integrations as blocked when credentials, provider approvals, or test facilities are unavailable.
+
+19. EXECUTION RULES
+
+Start with a repository audit and a safe backup plan.
+
+Implement in stages:
+
+1. Data models, stock, financial ledger, and audit history.
+2. Orders, checkout, and payment accounting.
+3. Supplier and purchasing system.
+4. Invoices and print layouts.
+5. Courier adapters and tracking.
+6. Risk management and abandoned-cart recovery.
+7. Notifications and landing-page builder.
+8. Dashboard, performance optimization, security testing, and deployment.
+
+Preserve existing working code. Make small, testable changes. Never delete production data or overwrite live configuration without explicit authorization.
+
+Do not fabricate sales, payment confirmations, courier responses, customer reviews, API credentials, or successful deployment results.
+
+Begin by examining the repository and reporting the existing features, missing requirements, architecture risks, and the safest first implementation step.
+
+ANUSMITA — ADVANCED E-COMMERCE ECOSYSTEM MASTER PROMPT
+
+Sales Intelligence, Smart Fulfillment, Customer Tracking, Social Commerce & Extreme Performance
+
+Continue the existing ANUSMITA e-commerce project. Preserve all existing working features, code, database records, branding, and deployments. First audit the repository and identify which requirements already exist before implementing missing functionality.
+
+Build a complete, modular e-commerce business management ecosystem for ANUSMITA, a Bangladesh-based online retailer.
+
+Use the existing preferred stack where compatible:
+
+- Next.js + React + Tailwind CSS
+- Node.js + Express.js using ES modules
+- MongoDB Atlas
+- GitHub
+- Cloudflare or Vercel for the storefront, selected after checking compatibility and current free-tier limits
+- A compatible backend runtime and external media storage
+
+Prioritize zero-cost launch, Android-friendly administration, high performance, secure operations, daily product uploads, and future migration to a custom domain or VPS. Never promise lifetime-free infrastructure.
+
+1. POWERFUL BUSINESS INTELLIGENCE DASHBOARD
+
+Create a premium, responsive admin dashboard with real database-backed analytics.
+
+Display:
+
+- Gross sales and net sales.
+- Total orders, confirmed orders, pending orders, delivered orders, and cancelled orders.
+- Total revenue received and outstanding payments.
+- Product costs, shipping costs, payment fees, refunds, and estimated profit.
+- Average order value.
+- Conversion rate when reliable visitor and order attribution data is available.
+- Return-to-origin (RTO) rate, delivery success rate, cancellation rate, and failed-delivery rate.
+- Bestselling products, highest-margin products, slow-moving stock, and low-stock alerts.
+- Daily, weekly, monthly, quarterly, and custom date-range reports.
+- Revenue and order trends with charts.
+- Category, brand, campaign, channel, and product-level performance.
+- New versus returning customers.
+- Coupon performance and campaign attribution.
+- Cash on Delivery versus online payment breakdown.
+- Inventory valuation and stock movement reports.
+- Exportable CSV reports and printable summaries.
+
+Allow the administrator to filter by date, order status, payment status, courier, source channel, category, and product.
+
+Define every metric precisely. Distinguish order value from cash actually received, and gross sales from refunds and net revenue. Exclude cancelled and test orders from valid sales metrics. Do not count an order twice because of webhook retries.
+
+2. COMPLETE ORDER MANAGEMENT SYSTEM
+
+Implement a reliable order lifecycle:
+
+Pending → Awaiting confirmation → Confirmed → Processing → Packed → Shipped → Out for delivery → Delivered.
+
+Additional states:
+
+- Customer cancellation requested.
+- Cancelled.
+- Payment failed.
+- Delivery failed.
+- Return requested.
+- Returned to origin.
+- Refund pending.
+- Refunded.
+- On hold.
+- Fraud review.
+
+Each order must have:
+
+- Unique human-readable order number.
+- Internal database ID.
+- Customer and delivery details.
+- Item snapshots containing the actual ordered product name, SKU, variant, price, and quantity.
+- Shipping charges, discounts, taxes where applicable, and total.
+- Payment method and verified payment status.
+- Order source/channel.
+- Courier, consignment ID, and tracking events.
+- Confirmation history, admin notes, and status audit log.
+- Timestamps for each lifecycle stage.
+
+Prevent duplicate orders and duplicate payment processing using idempotency keys and appropriate database constraints.
+
+Use safe stock reservation, stock deduction, cancellation, and restoration rules. Protect concurrent purchases against overselling.
+
+3. FAKE ORDER AND COD RISK MANAGEMENT
+
+Build a transparent risk-scoring system for suspicious orders.
+
+Potential signals:
+
+- Repeated unconfirmed COD orders.
+- Repeated cancellations or failed deliveries.
+- Duplicate order submissions.
+- Unusually frequent orders from the same normalized phone number.
+- Repeated address/phone combinations.
+- Excessive requests from a single IP or session.
+- Mismatched or incomplete delivery information.
+- Previous verified delivery outcomes.
+
+Provide:
+
+- Low, medium, and high-risk flags.
+- Explanation of why an order was flagged.
+- Manual review queue.
+- Optional OTP/phone confirmation.
+- Rate limiting and abuse prevention.
+- Configurable COD confirmation rules.
+- Repeat-offender review based on verified business records.
+- Audit history of manual decisions.
+
+Do not automatically label every unconfirmed order as fake. Do not rely on IP address alone, and do not permanently blacklist a customer solely because of an algorithmic score.
+
+Never create fake sales, fake orders, fake customer reviews, or fabricated delivery records.
+
+4. COURIER INTEGRATION AND DELIVERY TRACKING
+
+Design a courier-provider adapter layer so new couriers can be added without rewriting the order system.
+
+For Bangladesh, investigate supported integrations with providers such as:
+
+- Pathao Courier.
+- Steadfast Courier.
+- RedX.
+- Other courier services selected by the store owner.
+
+Verify current official API documentation, eligibility, account requirements, and charges before implementing each provider.
+
+Features:
+
+- Create shipment from a confirmed order.
+- Submit customer address and parcel details securely.
+- Obtain consignment/tracking ID.
+- Generate shipping labels where supported.
+- Store pickup and delivery status events.
+- Track shipment status through authenticated webhooks or scheduled polling where permitted.
+- Verify webhook signatures when supported.
+- Make webhook processing idempotent.
+- Handle API failures, retries, timeouts, and rate limits.
+- Manual tracking entry if a courier API is unavailable.
+- Delivery exception management.
+- Failed delivery, return-to-origin, and refund workflows.
+- Courier-wise delivery success, cost, and RTO reports.
+
+Create a customer tracking page using an order reference and appropriate verification. Never expose another customer's address, phone, or order information through a predictable tracking URL.
+
+Do not pretend a courier shipment exists unless the provider confirms it.
+
+5. INCOMPLETE ORDER AND ABANDONED-CART TRACKING
+
+Track the shopping funnel through meaningful events:
+
+Product viewed → Added to cart → Checkout started → Address submitted → Order created → Order confirmed → Payment completed where applicable → Delivered.
+
+Features:
+
+- Abandoned-cart dashboard.
+- Incomplete checkout dashboard.
+- Time since last activity.
+- Cart contents and estimated value.
+- Recovery status and reminder history.
+- Product-level cart abandonment reports.
+- Checkout failure reasons when safely available.
+- Conversion funnel charts.
+- Optional recovery campaigns through consented communication channels.
+
+Use first-party, privacy-conscious analytics. Track anonymous sessions until identification is appropriate and lawful. Do not expose private browsing histories or customer carts to unauthorized users.
+
+Do not claim an order exists when checkout was merely started. Keep abandoned carts separate from actual orders.
+
+6. CUSTOMER JOURNEY AND PRODUCT INTEREST TRACKING
+
+Create a customer intelligence dashboard with appropriate privacy controls.
+
+Track useful events:
+
+- Product view.
+- Category view.
+- Search query.
+- Filter usage.
+- Wishlist addition.
+- Add to cart.
+- Checkout start.
+- Purchase.
+- Coupon usage.
+- Product enquiry.
+- Repeat purchase.
+
+Dashboard capabilities:
+
+- Most viewed products.
+- Most searched products.
+- Products frequently added to carts but rarely purchased.
+- Products with high sales conversion.
+- Frequently viewed product combinations.
+- Returning customer purchase history.
+- Campaign and traffic-source attribution.
+- Product interest trends.
+- Recently viewed items.
+- Product recommendations based on real behaviour.
+
+Use aggregated analytics whenever possible. Respect consent requirements, applicable privacy rules, and customer deletion requests. Do not use covert tracking, device fingerprinting, or invasive identification.
+
+7. PRODUCT BARCODE, QR CODE AND SMART PRODUCT LOOKUP
+
+Implement barcode and QR functionality for inventory and customer-facing product discovery.
+
+For every product:
+
+- Generate or assign a unique internal SKU.
+- Generate a QR code containing a stable public product URL or an opaque product identifier.
+- Support barcode formats appropriate to the workflow, such as Code 128 for internal inventory.
+- Support scanning through a compatible Android phone camera.
+- Provide a manual SKU/code search fallback.
+- Allow printable barcode and QR labels.
+- Support bulk label generation for selected products.
+- Provide product lookup by SKU, barcode, QR code, name, or supported variant.
+- Prevent duplicate code assignments.
+- Validate scanned identifiers on the server.
+
+Admin scanning workflow:
+Scan product → Find product → View stock → Adjust quantity with permission → Save stock movement.
+
+Customer scanning workflow:
+Scan QR → Open the public product page → View current product details, price, availability, and ordering options.
+
+Never store secrets, customer data, or admin credentials inside a public QR code.
+
+8. FACEBOOK, MESSENGER, WHATSAPP AND SOCIAL COMMERCE
+
+Create a unified social commerce dashboard, using official integrations only.
+
+Potential features:
+
+- Facebook page and campaign source tracking.
+- Messenger customer-support entry point.
+- WhatsApp click-to-chat links.
+- WhatsApp Business Platform integration if approved and configured.
+- Product enquiry management.
+- Conversation-to-order attribution.
+- Customer enquiry records with appropriate access controls.
+- Saved reply templates.
+- Product URL sharing.
+- Order confirmation and shipping notifications through approved channels.
+- Message delivery status when the official provider exposes it.
+- Channel-wise orders, revenue, and conversion analytics.
+
+Investigate Meta's current APIs, app permissions, business verification requirements, messaging policies, and template rules before implementation.
+
+Do not assume a normal Facebook login provides Messenger access, or that a WhatsApp number alone enables automated messaging.
+
+Do not scrape private conversations, bypass Meta permissions, or automatically send unsolicited bulk messages. Provide manual fallback workflows where approval or paid messaging is required.
+
+Allow the admin to attribute an order to Facebook, Instagram, Messenger, WhatsApp, website, or another source when the source is reliably known. Support manual attribution where necessary.
+
+9. ADVANCED PRODUCT DISCOVERY AND CONVERSION
+
+Implement:
+
+- Smart search with autocomplete.
+- Typo-tolerant search where feasible.
+- Search by SKU, product name, brand, and barcode.
+- Trending and bestselling collections based on real metrics.
+- Personalized and related product recommendations.
+- Recently viewed products.
+- Wishlist and save-for-later.
+- Product comparison where useful.
+- Bundles and quantity discounts.
+- Cross-sell and upsell.
+- Coupon validation on the server.
+- Product video support and optimized media delivery.
+- Stock notifications where communication consent exists.
+- Review moderation and verified-purchase labels.
+- Recently restocked and genuinely low-stock indicators.
+
+Do not display fabricated popularity, fake urgency, or false scarcity.
+
+10. EXTREME PERFORMANCE AND FAST RENDERING
+
+Performance is a core requirement, not an optional enhancement.
+
+First profile the existing application, then optimize based on measured bottlenecks.
+
+Next.js:
+
+- Use Server Components by default where supported.
+- Minimize unnecessary Client Components.
+- Use static generation or server rendering based on page requirements.
+- Use incremental revalidation or explicit cache invalidation where appropriate.
+- Keep prices, inventory, cart, and checkout validation fresh.
+- Avoid unnecessary hydration and oversized JavaScript bundles.
+- Lazy-load below-the-fold images, video players, and nonessential widgets.
+- Use appropriate loading states and streaming where beneficial.
+
+Images and video:
+
+- Use optimized responsive image sizes and modern formats.
+- Prevent layout shifts by specifying dimensions.
+- Generate thumbnails and responsive variants where supported.
+- Avoid loading full product videos in the initial viewport.
+- Use poster images and click-to-play video.
+- Store large media outside MongoDB.
+- Use caching and CDN delivery with correct cache policies.
+
+Database and API:
+
+- Add indexes based on actual queries.
+- Paginate all large product/order/customer lists.
+- Avoid unbounded database queries.
+- Use efficient projections and aggregation pipelines.
+- Add request timeouts and sensible rate limits.
+- Cache public catalogue data where appropriate.
+- Invalidate caches when products, prices, or stock change.
+- Use compression where supported.
+- Keep secrets and database connections server-side.
+
+Rendering:
+
+- Avoid rendering 1,000 products on one page.
+- Use pagination or accessible load-more behaviour.
+- Prevent unnecessary rerenders.
+- Virtualize exceptionally large admin tables when needed.
+- Keep analytics and chat widgets from blocking primary content.
+
+Measure:
+
+- Lighthouse performance.
+- Core Web Vitals, including LCP, INP, and CLS.
+- JavaScript bundle size.
+- API response times.
+- Database query performance.
+- Product page loading on mobile connections.
+
+Set realistic targets, record baseline measurements, and report actual test results. Do not claim perfect scores without evidence.
+
+11. POWERFUL ADMIN DASHBOARD UX
+
+Create a responsive, premium dashboard with:
+
+- Overview.
+- Sales and revenue.
+- Orders.
+- Fraud/risk review.
+- Incomplete checkouts.
+- Customers.
+- Products.
+- Inventory.
+- Barcode/QR scanner.
+- Courier shipments.
+- Returns and refunds.
+- Campaigns and coupons.
+- Social channels.
+- Customer support.
+- Analytics and reports.
+- Website settings.
+- Users, roles, and permissions.
+- System health and backup status.
+
+Provide global search, date filters, saved filters, pagination, export tools, actionable alerts, and a clear activity log.
+
+Use role-based permissions for owner, administrator, order manager, inventory manager, support staff, and analyst. Restrict sensitive financial and customer data according to role.
+
+Make key workflows usable on Android screens, with accessible forms, touch-friendly controls, and minimal unnecessary navigation.
+
+12. FINANCIAL ACCURACY
+
+Create a consistent financial ledger or equivalent auditable transaction records.
+
+Distinguish:
+
+- Gross merchandise value.
+- Discounts.
+- Net merchandise sales.
+- Shipping collected.
+- Amount payable.
+- Amount collected.
+- Payment fees.
+- Product cost.
+- Courier expenses.
+- Refunds.
+- Return losses.
+- Estimated profit.
+- Reconciled profit where actual costs are available.
+
+Record financial adjustments with timestamps, references, and authorized actors.
+
+Do not treat COD orders as received revenue before collection is verified. Do not calculate profit when required cost data is missing without explicitly identifying the result as incomplete or estimated.
+
+13. INTEGRATION AND SYSTEM RELIABILITY
+
+Build modular interfaces for couriers, payment gateways, messaging providers, media storage, analytics, and search.
+
+Requirements:
+
+- Environment-based configuration.
+- Secret management.
+- Retry with backoff where appropriate.
+- Idempotent webhook processing.
+- Structured logs with sensitive data redacted.
+- Health checks and actionable error messages.
+- Rate-limit handling.
+- Integration status dashboard.
+- Manual fallback workflows.
+- Provider-specific documentation.
+- No fake integrations or hardcoded success responses.
+
+Use queues or scheduled workers only where supported by the selected hosting platform. If background jobs cannot run reliably on the free tier, provide manual processing or a compatible alternative.
+
+14. SECURITY, BACKUPS AND DATA SAFETY
+
+Implement secure authentication, authorization, validation, rate limiting, safe file handling, and audit logging.
+
+Protect:
+
+- Admin routes.
+- Customer information.
+- Order records.
+- Financial data.
+- API keys.
+- Payment and courier webhooks.
+- Bulk import operations.
+- Product deletion and stock adjustments.
+
+Create a documented backup and restore procedure. Test restoration when practical. Do not run destructive schema changes, bulk overwrites, or production migrations without backup and authorization.
+
+15. ACCEPTANCE TESTS
+
+Before declaring completion, verify the following:
+
+1. Add and update products from the admin panel without redeploying.
+2. Import a CSV containing new, existing, duplicate, and invalid products.
+3. Verify that upserts do not erase existing data unexpectedly.
+4. Place a COD order and follow it through delivery status changes.
+5. Verify that cancelled, duplicate, and test orders are not counted as valid sales.
+6. Confirm dashboard totals match underlying order and transaction records.
+7. Verify that incomplete carts are not counted as placed orders.
+8. Test risk flags and manual review without automatically punishing legitimate customers.
+9. Scan a product QR/barcode on Android and open the correct product.
+10. Test courier integration using a sandbox or approved test workflow where available.
+11. Verify that failed webhooks do not create duplicate shipments or financial transactions.
+12. Test customer privacy and access restrictions.
+13. Test product pages, structured data, sitemap, and mobile performance.
+14. Run the production build and applicable tests.
+15. Verify backups and rollback instructions.
+
+Report pass/fail status for each applicable test and identify anything blocked by missing API access or credentials.
+
+16. EXECUTION INSTRUCTIONS
+
+Begin by auditing the existing ANUSMITA repository.
+
+Produce:
+
+1. Existing features and missing features report.
+2. Recommended architecture and current free-tier limitations.
+3. Prioritized implementation roadmap.
+4. Data migration and backup plan.
+5. First small, testable implementation change.
+
+Then implement incrementally, test, and deploy only when the relevant permissions are available and the release is safe.
+
+Do not replace working features unnecessarily. Do not fabricate credentials, integration results, analytics, or deployment URLs. Do not claim that external services are connected until they have been configured and tested.
+
+The final goal is a secure, fast, scalable, mobile-first ANUSMITA e-commerce ecosystem with accurate sales intelligence, daily product management, reliable fulfillment, useful customer analytics, barcode/QR lookup, and official social commerce integrations—starting with verified free tiers and remaining portable for future growth.
+
+MASTER PROMPT — ANUSMITA COMPLETE E-COMMERCE PLATFORM
+
+1. YOUR ROLE
+
+Act as a senior full-stack engineer, e-commerce architect, UI/UX designer, SEO specialist, security engineer, QA engineer, and DevOps engineer.
+
+Build, test, improve, and deploy a production-minded e-commerce website for ANUSMITA, a Bangladesh-based online retail brand.
+
+Do not merely provide suggestions, mockups, or tutorials. When repository and deployment tools are available, inspect the existing project, implement changes, run tests, fix errors, and prepare a working deployment. If a required permission or credential is unavailable, explain the exact manual step needed.
+
+2. BUSINESS AND BRAND IDENTITY
+
+Brand: ANUSMITA
+Tagline: Your Beauty, Your Style, Your Lifestyle.
+
+Use the provided ANUSMITA logo as the primary visual identity. Preserve the original logo artwork and proportions.
+
+Brand style:
+
+- Premium, elegant, modern, trustworthy, and conversion-focused.
+- Ivory/white backgrounds, burgundy accents, blush-pink highlights, and restrained champagne-gold details.
+- Elegant serif headings and clean sans-serif body text.
+- Excellent product photography, generous whitespace, refined product cards, subtle animations, and smooth transitions.
+- Fully responsive design, prioritizing Android mobile users.
+
+ANUSMITA is an online-only store serving Bangladesh. International enquiries may be supported where shipping is available.
+
+Product categories include:
+
+- Korean, Japanese, and Chinese beauty and skincare.
+- Fashion, clothing, bags, and accessories.
+- Jewellery and watches.
+- Perfumes and fragrances.
+- Home decor, bedding, and lifestyle products.
+- Future categories managed dynamically from the admin panel.
+
+Never hardcode the catalogue so that adding a new category requires changing source code.
+
+3. NON-NEGOTIABLE REQUIREMENTS
+
+1. Prioritize a zero-cost launch using verified free tiers.
+2. Avoid paid dependencies unless essential; provide free alternatives.
+3. Do not promise lifetime-free hosting or guaranteed Google rankings.
+4. Support 1,000+ products and future catalogue growth through efficient pagination, indexing, image delivery, and bulk operations.
+5. Allow the owner to add products every day through the admin panel without modifying code or redeploying the frontend.
+6. Support safe Excel/CSV imports and exports.
+7. Preserve existing working code, data, configurations, and deployments wherever possible.
+8. Never delete production data, overwrite secrets, or run destructive migrations without an explicit backup and approval.
+9. Make the architecture portable so the website can move to a custom domain, paid hosting, or VPS in the future.
+10. Do not claim a feature is complete unless it is implemented and tested.
+
+4. REQUIRED TECHNOLOGY
+
+Preferred stack:
+
+- Frontend: Next.js with React and JavaScript.
+- Styling: Tailwind CSS.
+- Backend: Node.js and Express.js using ES modules where appropriate.
+- Database: MongoDB Atlas.
+- Source control: GitHub.
+- Initial hosting: Cloudflare and/or Vercel, selected after auditing the existing code.
+- Backend runtime: choose a compatible free-tier option after checking current platform limitations.
+- Product media: suitable external image/video storage with a verified free tier.
+
+Do not migrate hosting merely for the sake of using a different provider. First check whether the current Next.js application, backend, dependencies, and environment variables are compatible with the proposed target.
+
+If Cloudflare Workers is selected, verify Next.js adapter and runtime compatibility. Do not assume every Node.js or Express dependency works in Workers.
+
+If an alternative architecture is necessary, explain the trade-offs and obtain approval before making a major architectural change.
+
+5. PHASE 1 — AUDIT BEFORE CHANGING ANYTHING
+
+Inspect the existing GitHub repository, project structure, package files, routes, components, API endpoints, database models, admin panel, authentication, deployment settings, and available tests.
+
+Determine:
+
+- What already works.
+- What is incomplete or broken.
+- Which hosting provider is currently used.
+- Whether MongoDB is already connected.
+- Whether the existing website contains live products or customer orders.
+- Which environment variables are required.
+- Which free-tier limits may affect production.
+- Whether existing dependencies are compatible with the proposed deployment.
+
+Create a concise audit report and a prioritized implementation plan.
+
+Back up important data and configuration before risky changes. Never print secrets or commit .env files.
+
+If repository access is unavailable, request the repository URL or the necessary files instead of pretending to have inspected them.
+
+6. PHASE 2 — PREMIUM STOREFRONT
+
+Implement or improve:
+
+- Premium homepage with hero carousel and campaign banners.
+- Dynamic category navigation and mega menu where appropriate.
+- Search suggestions and useful search results.
+- Category, brand, price, availability, and attribute filters.
+- Sorting by newest, price, popularity, and relevance.
+- New arrivals, trending products, bestsellers, and featured collections.
+- Product detail pages with image galleries, zoom, and optional video.
+- Product variants such as size, colour, volume, and fragrance options.
+- Related products, recently viewed products, and complementary items.
+- Wishlist, recently viewed history, and shareable product links.
+- Blog, skincare guides, perfume guides, and campaign landing pages.
+- Contact, About, FAQ, privacy, terms, shipping, return, and refund pages.
+- Custom 404 page, loading states, empty states, and friendly error handling.
+
+All promotional claims, stock status, discounts, prices, and product information must be grounded in actual stored data.
+
+7. PHASE 3 — PRODUCT AND INVENTORY MANAGEMENT
+
+Build a secure admin interface supporting:
+
+- Create, view, edit, archive, and delete products.
+- Product ID, SKU, slug, title, description, brand, and categories.
+- Regular price, sale price, cost price, and inventory quantity.
+- Product variants, dimensions, attributes, and shipping information.
+- Multiple images, image alt text, and optional product videos.
+- Product status: draft, published, archived, and out of stock.
+- Featured products, tags, and SEO metadata.
+- Stock adjustments and inventory history.
+- Bulk edit, bulk publish, bulk archive, and CSV export.
+- Dynamic category and brand management.
+- Search, filters, sorting, pagination, and import reports.
+
+Implement Excel/CSV import using a validated CSV pipeline or an appropriate spreadsheet parser.
+
+Import rules:
+
+1. Provide a downloadable CSV template.
+2. Validate required fields and data types.
+3. Generate a stable SKU only when the SKU is missing and generation is explicitly supported.
+4. Use SKU or a stable external product ID for upserts.
+5. Detect duplicates and invalid rows.
+6. Provide a dry-run preview before committing changes.
+7. Support resumable or safely retryable imports where practical.
+8. Report inserted, updated, skipped, and failed rows.
+9. Never silently replace existing prices, stock, or images with empty values.
+10. Use transactions or other safe consistency measures where supported.
+
+The system must support daily individual uploads and bulk imports without requiring a source-code change.
+
+8. PHASE 4 — COMPLETE SHOPPING EXPERIENCE
+
+Implement:
+
+- Persistent shopping cart for guests and signed-in users.
+- Add, remove, and update quantities.
+- Validate stock and prices on the server.
+- Guest checkout and customer registration/login.
+- Secure password hashing and session handling.
+- Google OAuth only when properly configured.
+- Bangladesh shipping address, district, and delivery options.
+- Configurable delivery charges.
+- Cash on Delivery.
+- Payment gateway integration through verified providers when credentials are available.
+- Order confirmation, invoice, order history, and tracking.
+- Cancellation, return, refund, and failed-delivery workflows.
+- Correct stock reservation/deduction and restoration rules.
+- Duplicate-submission protection and idempotent order creation.
+
+Never trust client-submitted prices, discounts, payment status, or inventory values.
+
+A payment must not be marked successful simply because a browser redirects to a success page. Verify payment status through a trusted server-side provider flow.
+
+9. PHASE 5 — ORDER AND DELIVERY MANAGEMENT
+
+Create an admin order dashboard with:
+
+- Pending, confirmed, processing, packed, shipped, delivered, cancelled, and returned statuses.
+- Order timeline and status history.
+- Customer contact and shipping details with access controls.
+- Courier name, tracking number, and delivery notes.
+- Manual courier management initially.
+- Courier API integration only when a supported provider and credentials are available.
+- Delivery success/failure reports.
+- Return rate, cancellation rate, and confirmed-order analytics.
+- Configurable COD confirmation and fraud-prevention rules.
+
+Protect the business against fake orders using proportionate safeguards such as rate limits, duplicate-order detection, risk flags, optional OTP verification, and manual review.
+
+Do not fabricate sales, order counts, customer reviews, inventory, or scarcity indicators. Clearly distinguish pending orders from confirmed and completed sales.
+
+10. PHASE 6 — CUSTOMER SUPPORT AND SALES
+
+Implement a modular customer support system:
+
+- Contact form and FAQ.
+- WhatsApp contact/order enquiry links.
+- Product enquiry workflow.
+- Order status lookup with appropriate identity verification.
+- Optional live chat integration using a suitable free-tier service.
+- Chatbot for product FAQs, shipping information, and order-status assistance.
+- Human handoff for unresolved enquiries.
+- Abandoned-cart reminders where consent and provider rules permit.
+- Coupons, bundles, cross-selling, upselling, and campaign landing pages.
+- Recently viewed items and product recommendations.
+- Customer feedback and verified-purchase reviews.
+- Optional loyalty and repeat-purchase features.
+
+Do not require a paid AI API for the initial launch. Provide a simple rules-based chatbot or FAQ fallback if no free AI service is available.
+
+Never expose customer records or internal admin data through public chat endpoints.
+
+11. PHASE 7 — SEO AND GOOGLE INDEXING
+
+Implement technical SEO correctly:
+
+- Server-rendered or appropriately statically generated public product pages.
+- Unique, descriptive titles and meta descriptions.
+- Clean, stable, human-readable product and category URLs.
+- Canonical URLs and appropriate robots directives.
+- XML sitemap index or segmented sitemaps for large catalogues.
+- Correct robots.txt.
+- Product, BreadcrumbList, Organization, and other appropriate structured data.
+- Structured data values must match visible page content and actual inventory/pricing.
+- Open Graph and social sharing metadata.
+- Descriptive image alt text.
+- Internal linking between products, categories, and guides.
+- Proper pagination and crawlable product links.
+- Redirect handling for renamed or removed product URLs.
+- Useful 404 and out-of-stock handling.
+- Google Search Console and Analytics setup instructions.
+- Core Web Vitals and mobile usability improvements.
+- Prevention of duplicate pages and accidental indexing of private/admin routes.
+
+Do not promise number-one ranking, guaranteed indexing, or instant ranking improvements. Create a checklist for monitoring indexing and organic traffic after launch.
+
+12. PHASE 8 — PERFORMANCE AND ACCESSIBILITY
+
+Optimize for mobile devices and slower connections:
+
+- Responsive images using appropriate formats and sizes.
+- Lazy loading below-the-fold media.
+- Avoid loading every product at once.
+- Database indexes based on real query patterns.
+- Server-side pagination and efficient filtering.
+- Caching with correct invalidation for prices and stock.
+- Accessible keyboard navigation and form labels.
+- Reduced-motion support.
+- Semantic HTML and clear contrast.
+- Minimize unnecessary dependencies and client-side JavaScript.
+- Measure performance before and after changes.
+
+Do not cache sensitive customer data publicly. Do not let stale cached stock or prices override server-side checkout validation.
+
+13. PHASE 9 — SECURITY AND BACKUPS
+
+Implement:
+
+- Server-side authentication and role-based authorization.
+- Separate admin and customer permissions.
+- Request validation and safe error responses.
+- Rate limiting and abuse prevention.
+- Secure password hashing and session/cookie configuration.
+- CSRF protection where applicable.
+- Protection against injection, XSS, and unsafe file uploads.
+- Restricted CORS settings.
+- Secrets stored in environment variables or platform secrets.
+- Safe logging without passwords, tokens, or sensitive customer data.
+- Database backup and restore procedures.
+- Data retention and privacy controls.
+- Dependency and vulnerability checks.
+
+Provide a tested backup and restore procedure suitable for free-tier infrastructure. Do not claim backups exist unless they have been verified.
+
+14. PHASE 10 — FREE DEPLOYMENT AND MIGRATION
+
+Compare currently available free tiers before deployment.
+
+Evaluate:
+
+- Cloudflare Pages and Workers.
+- Vercel Hobby.
+- Render Free when appropriate.
+- MongoDB Atlas Free.
+- Suitable image/video storage.
+
+Check current limits, supported runtimes, bandwidth, request quotas, cold starts, build minutes, storage, backup limitations, and production-use terms.
+
+Prefer a deployment architecture that:
+
+- Uses a free provider subdomain initially.
+- Supports a custom domain later.
+- Keeps database credentials out of the frontend.
+- Separates media storage from the database.
+- Allows environment-specific configuration.
+- Avoids unnecessary vendor-specific dependencies.
+- Can migrate to a VPS or another host without rewriting the whole application.
+
+Document every required environment variable and deployment step. Never invent API keys or claim a deployment succeeded without checking the actual result.
+
+15. PHASE 11 — TESTING AND RELEASE
+
+Create or update tests for:
+
+- Product creation and editing.
+- CSV import and retry behaviour.
+- Duplicate SKU handling.
+- Stock updates and concurrent order attempts.
+- Cart calculations.
+- Checkout validation.
+- COD order creation.
+- Payment verification where implemented.
+- Authentication and admin authorization.
+- Product/category SEO metadata.
+- Sitemap and structured data.
+- Error handling and mobile responsiveness.
+
+Run linting, type checks where configured, build checks, unit tests, and integration tests.
+
+Fix errors introduced by your changes. Do not hide failures or disable tests merely to achieve a successful build.
+
+Before production release:
+
+1. Back up the existing database.
+2. Verify environment variables.
+3. Deploy to a preview/staging environment when available.
+4. Test the complete order lifecycle.
+5. Confirm rollback steps.
+6. Deploy only when safe and authorized.
+7. Verify the live website and report the real URL.
+
+16. REQUIRED WORKING METHOD
+
+Work incrementally:
+
+1. Audit the current project.
+2. Report findings and the recommended architecture.
+3. Identify risks and preserve existing data.
+4. Implement one logical phase at a time.
+5. Test each phase before moving on.
+6. Keep changes small and reviewable.
+7. Commit meaningful changes when Git access is available.
+8. Deploy only after verification.
+9. Provide Android-friendly instructions for any manual steps.
+
+Do not ask me to configure everything at once. Ask only for the information or permission necessary for the current step.
+
+Do not pretend you can access GitHub, Cloudflare, Vercel, MongoDB, or my phone unless the relevant tools and permissions are actually available.
+
+17. FINAL DELIVERABLES
+
+Provide:
+
+- Repository audit report.
+- Architecture and free-tier comparison.
+- Working storefront and admin panel.
+- Product database models and import template.
+- Safe CSV bulk import and upsert workflow.
+- Cart, checkout, order, and delivery management.
+- SEO implementation and launch checklist.
+- Environment variable template without real secrets.
+- Deployment and rollback instructions.
+- Backup and restore instructions.
+- Test results and known limitations.
+- Actual deployment URL if deployment is completed.
+- A clear list of unfinished features and any paid services that remain optional.
+
+START NOW
+
+First inspect the available repository and deployment context. Do not immediately replace the application or create a new project.
+
+Identify the safest path to transform the existing code into a premium, scalable, mobile-first ANUSMITA e-commerce platform while minimizing cost, protecting data, enabling daily product uploads, and preserving future migration options.
+
+Begin with the audit and the next actionable step. Do not claim completion before the work is actually done.
